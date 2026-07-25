@@ -19,6 +19,7 @@
       "home.aboutP1": "I am a Computer Science graduate and Flutter developer with hands-on experience in Flutter, Dart, Firebase Authentication, Cloud Firestore, REST APIs, Dio, Retrofit, Bloc/Cubit, Hive, and Git/GitHub.",
       "home.aboutP2": "I enjoy solving technical problems, connecting applications to real backends, and continuously improving architecture and user experience.",
       "home.moreSkills": "More about my skills",
+      "home.downloadCV": "Download CV",
       "home.selectedWork": "Selected work",
       "home.worksTitle": "Impressive Works",
       "home.worksIntro": "A selection of projects that reflect my experience with mobile development, backend integration, authentication, storage, and scalable application flows.",
@@ -49,6 +50,8 @@
       "contact.email": "Email",
       "contact.phone": "WhatsApp",
       "contact.linkedin": "LinkedIn",
+      "contact.location": "Location",
+      "contact.locationValue": "Giza, Egypt",
       "footer.description": "Flutter developer building responsive mobile products, clean interfaces, and reliable backend-connected experiences.",
       "footer.navigation": "Navigation",
       "footer.contact": "Get in touch",
@@ -57,6 +60,7 @@
       "footer.skills": "Skills",
       "footer.backTop": "Back to top",
       "footer.rights": "All rights reserved.",
+      "footer.downloadCV": "Download CV ↓",
       "project.loading": "Loading project details…",
       "projects.loading": "Loading projects…"
     },
@@ -79,6 +83,7 @@
       "home.aboutP1": "أنا خريج علوم حاسب ومطور Flutter، لدي خبرة عملية في Flutter وDart وFirebase Authentication وCloud Firestore وREST APIs وDio وRetrofit وBloc/Cubit وHive وGit/GitHub.",
       "home.aboutP2": "أستمتع بحل المشكلات التقنية، وربط التطبيقات بخدمات خلفية حقيقية، وتحسين معمارية المشروع وتجربة المستخدم باستمرار.",
       "home.moreSkills": "اعرف المزيد عن مهاراتي",
+      "home.downloadCV": "تنزيل السيرة الذاتية",
       "home.selectedWork": "أعمال مختارة",
       "home.worksTitle": "مشاريع مميزة",
       "home.worksIntro": "مجموعة من المشاريع التي توضح خبرتي في تطوير تطبيقات الموبايل، وربط الأنظمة الخلفية، والمصادقة، والتخزين، وتدفقات التطبيقات القابلة للتوسع.",
@@ -109,6 +114,8 @@
       "contact.email": "البريد الإلكتروني",
       "contact.phone": "واتساب",
       "contact.linkedin": "لينكدإن",
+      "contact.location": "الموقع",
+      "contact.locationValue": "الجيزة، مصر",
       "footer.description": "مطور Flutter أبني منتجات موبايل متجاوبة وواجهات واضحة وتجارب موثوقة مرتبطة بالـ backend.",
       "footer.navigation": "التنقل",
       "footer.contact": "تواصل معي",
@@ -117,6 +124,7 @@
       "footer.skills": "المهارات",
       "footer.backTop": "العودة للأعلى",
       "footer.rights": "جميع الحقوق محفوظة.",
+      "footer.downloadCV": "تنزيل السيرة الذاتية ↓",
       "project.loading": "جارٍ تحميل تفاصيل المشروع…",
       "projects.loading": "جارٍ تحميل المشاريع…"
     }
@@ -186,6 +194,24 @@
       button.setAttribute("aria-label", t(isDark ? "actions.themeLight" : "actions.themeDark"));
       button.setAttribute("title", t(isDark ? "actions.themeLight" : "actions.themeDark"));
     });
+  }
+
+
+  function setupAmbientBackground() {
+    if (document.querySelector(".ambient-background")) return;
+    const layer = document.createElement("div");
+    layer.className = "ambient-background";
+    layer.setAttribute("aria-hidden", "true");
+    layer.innerHTML = `
+      <div class="ambient-grid"></div>
+      <span class="ambient-orb ambient-orb-one"></span>
+      <span class="ambient-orb ambient-orb-two"></span>
+      <span class="ambient-orb ambient-orb-three"></span>
+      <span class="ambient-path ambient-path-one"><i></i></span>
+      <span class="ambient-path ambient-path-two"><i></i></span>
+      <span class="ambient-path ambient-path-three"><i></i></span>
+    `;
+    document.body.prepend(layer);
   }
 
   function setupControls() {
@@ -268,6 +294,7 @@
     document.querySelectorAll("[data-year]").forEach(node => { node.textContent = new Date().getFullYear(); });
     setLanguage(getLanguage(), false);
     setTheme(preferredTheme());
+    setupAmbientBackground();
     setupControls();
     setupMenu();
     setupHeroMotion();

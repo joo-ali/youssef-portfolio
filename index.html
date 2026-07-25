@@ -22,7 +22,7 @@
   </script>
   <title>Youssef Ali Kamal — Flutter Developer</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css?v=12">
+  <link rel="stylesheet" href="css/styles.css?v=13">
 </head>
 <body class="has-splash" data-page="home" id="top">
   <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -88,7 +88,13 @@
           <div class="about-side reveal">
             <p data-i18n="home.aboutP1">I am a Computer Science graduate and Flutter developer with hands-on experience in Flutter, Dart, Firebase Authentication, Cloud Firestore, REST APIs, Dio, Retrofit, Bloc/Cubit, Hive, and Git/GitHub.</p>
             <p data-i18n="home.aboutP2">I enjoy solving technical problems, connecting applications to real backends, and continuously improving architecture and user experience.</p>
-            <a class="round-link" href="skills.html"><span data-i18n="home.moreSkills">More about my skills</span><i aria-hidden="true">↗</i></a>
+            <div class="about-actions">
+              <a class="round-link" href="skills.html"><span data-i18n="home.moreSkills">More about my skills</span><i aria-hidden="true">↗</i></a>
+              <a class="cv-download" href="assets/Youssef_Ali_Kamal_CV.pdf" download="Youssef_Ali_Kamal_CV.pdf">
+                <span class="cv-download-icon" aria-hidden="true">↓</span>
+                <span data-i18n="home.downloadCV">Download CV</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -123,6 +129,7 @@
             <div><span data-i18n="contact.email">Email</span><strong><a href="mailto:y.ali2242@nu.edu.eg">y.ali2242@nu.edu.eg</a></strong></div>
             <div><span data-i18n="contact.phone">WhatsApp</span><strong><a href="https://wa.me/201013309940" target="_blank" rel="noreferrer">01013309940</a></strong></div>
             <div><span data-i18n="contact.linkedin">LinkedIn</span><strong><a href="https://www.linkedin.com/in/youssef-ali-kamal/" target="_blank" rel="noreferrer">youssef-ali-kamal</a></strong></div>
+            <div><span data-i18n="contact.location">Location</span><strong data-i18n="contact.locationValue">Giza, Egypt</strong></div>
           </div>
         </div>
       </section>
@@ -149,6 +156,8 @@
               <a href="mailto:y.ali2242@nu.edu.eg">y.ali2242@nu.edu.eg</a>
               <a href="https://wa.me/201013309940" target="_blank" rel="noreferrer">WhatsApp · 01013309940</a>
               <a href="https://www.linkedin.com/in/youssef-ali-kamal/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+              <span data-i18n="contact.locationValue">Giza, Egypt</span>
+              <a href="assets/Youssef_Ali_Kamal_CV.pdf" download="Youssef_Ali_Kamal_CV.pdf" data-i18n="footer.downloadCV">Download CV ↓</a>
             </div>
           </div>
         </div>
@@ -162,7 +171,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
-  <script src="js/site.js?v=12"></script>
+  <script src="js/site.js?v=13"></script>
   <script src="js/animations.js?v=7"></script>
   <script src="js/public.js"></script>
 </body>

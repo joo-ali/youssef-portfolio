@@ -99,3 +99,8 @@ The public dark theme now uses the navy color family from the home hero instead 
 
 ## V11 hero contrast
 Added a navy fade behind the hero typography plus a subtle dark stroke/shadow so the white title stays readable over the white shirt.
+
+## V13 additions
+- Downloadable CV at `assets/Youssef_Ali_Kamal_CV.pdf`.
+- Original animated signal-field background using the existing navy/blue palette.
+- Contact location: Giza, Egypt / الجيزة، مصر.
