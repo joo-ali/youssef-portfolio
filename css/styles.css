@@ -807,7 +807,7 @@ html[data-theme="dark"] .skill-card:hover { box-shadow: 0 28px 75px rgba(0,0,0,.
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .js .has-splash .splash-screen { display: none !important; }
+  .js .has-splash .splash-screen { display: grid !important; }
   .js .has-splash:not(.splash-complete) .hero-copy-top,
   .js .has-splash:not(.splash-complete) .hero-kicker,
   .js .has-splash:not(.splash-complete) .hero-title,

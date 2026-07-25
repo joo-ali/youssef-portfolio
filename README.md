@@ -80,3 +80,7 @@ Upload the folder contents to a GitHub repository, enable GitHub Pages from the 
 ## Interactive app demo
 
 A normal webpage cannot run an Android APK directly. Build and deploy the application as Flutter Web, then save its deployed URL in the dashboard under **Live demo URL (also used in the phone emulator)**. It will appear inside the phone frame on the project-details page.
+
+
+## Splash V7
+The splash appears on every full load of the home page. Add `?intro=0` to skip it temporarily.

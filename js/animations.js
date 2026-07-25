@@ -22,17 +22,17 @@
     if (!splash) return;
 
     const params = new URLSearchParams(window.location.search);
-    const forceIntro = params.get("intro") === "1";
-    let seen = false;
-    try { seen = sessionStorage.getItem("portfolio-intro-seen") === "1"; } catch (_) {}
+    const skipIntro = params.get("intro") === "0";
 
-    if (reducedMotion || (seen && !forceIntro)) {
+    if (skipIntro) {
       finishSplash(splash, true);
       return;
     }
 
+    // V7: show the splash on every full home-page load so it is always visible
+    // during testing and on fresh visits. Reduced-motion users still see a
+    // short static version instead of having it removed completely.
     document.body.classList.add("splash-lock");
-    try { sessionStorage.setItem("portfolio-intro-seen", "1"); } catch (_) {}
 
     let completed = false;
     const complete = () => {
@@ -41,8 +41,8 @@
       finishSplash(splash, false);
     };
 
-    // Keep it short enough to feel premium, not obstructive.
-    window.setTimeout(complete, 2450);
+    const duration = reducedMotion ? 900 : 2450;
+    window.setTimeout(complete, duration);
     splash.addEventListener("pointerdown", () => window.setTimeout(complete, 120), { once: true });
     document.addEventListener("keydown", event => {
       if (event.key === "Escape" || event.key === "Enter" || event.key === " ") complete();
