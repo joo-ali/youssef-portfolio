@@ -84,3 +84,7 @@ A normal webpage cannot run an Android APK directly. Build and deploy the applic
 
 ## Splash V7
 The splash appears on every full load of the home page. Add `?intro=0` to skip it temporarily.
+
+
+## V8 theme update
+The public dark theme now uses the navy color family from the home hero instead of pure black.

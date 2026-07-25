@@ -31,24 +31,25 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #090a0d;
-  --surface: #101216;
-  --surface-2: #171a20;
-  --surface-soft: #0d0f13;
-  --ink: #f5f7fb;
-  --muted: #a3a8b3;
-  --line: rgba(255, 255, 255, 0.12);
-  --line-strong: rgba(255, 255, 255, 0.22);
-  --accent: #7186ff;
-  --accent-2: #90a0ff;
-  --on-accent: #080a10;
-  --header-bg: rgba(9, 10, 13, 0.86);
-  --footer-bg: #030406;
-  --footer-ink: #f8fafc;
-  --footer-muted: #8e96a5;
-  --card-dark: #17191e;
-  --shadow-sm: 0 12px 34px rgba(0, 0, 0, 0.22);
-  --shadow: 0 25px 75px rgba(0, 0, 0, 0.3);
+  /* Navy night theme — derived from the home hero palette instead of pure black. */
+  --bg: #06152f;
+  --surface: #0a2042;
+  --surface-2: #0e2a52;
+  --surface-soft: #081c3a;
+  --ink: #f6f8ff;
+  --muted: #b3bfd3;
+  --line: rgba(194, 212, 240, 0.14);
+  --line-strong: rgba(194, 212, 240, 0.27);
+  --accent: #7890ff;
+  --accent-2: #9aabff;
+  --on-accent: #06142d;
+  --header-bg: rgba(5, 20, 46, 0.88);
+  --footer-bg: #041126;
+  --footer-ink: #f8faff;
+  --footer-muted: #a7b4ca;
+  --card-dark: #0d274d;
+  --shadow-sm: 0 12px 34px rgba(0, 8, 24, 0.24);
+  --shadow: 0 25px 75px rgba(0, 8, 24, 0.34);
 }
 
 * { box-sizing: border-box; }
