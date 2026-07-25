@@ -104,3 +104,7 @@ Added a navy fade behind the hero typography plus a subtle dark stroke/shadow so
 - Downloadable CV at `assets/Youssef_Ali_Kamal_CV.pdf`.
 - Original animated signal-field background using the existing navy/blue palette.
 - Contact location: Giza, Egypt / الجيزة، مصر.
+
+## V14 visual update
+
+The animated ambient field is visible across all public pages. Each content section, project card, skill card, case-study card, contact item, and live-demo area uses a high-contrast translucent panel for readability in both light and navy-dark themes.

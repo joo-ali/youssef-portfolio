@@ -1239,3 +1239,277 @@ html[data-theme="light"] .ambient-orb { mix-blend-mode: multiply; opacity: .24; 
   .ambient-path,
   .cv-download-icon { animation: none !important; }
 }
+
+/* V14 — animated background across the full site + readable glass content */
+:root {
+  --panel-bg: rgba(255, 255, 255, 0.82);
+  --panel-bg-strong: rgba(255, 255, 255, 0.93);
+  --panel-bg-soft: rgba(245, 248, 253, 0.80);
+  --panel-border: rgba(37, 64, 113, 0.14);
+  --panel-border-strong: rgba(37, 64, 113, 0.24);
+  --panel-shadow: 0 26px 80px rgba(17, 35, 70, 0.12);
+  --card-panel: rgba(255, 255, 255, 0.90);
+  --card-panel-hover: rgba(255, 255, 255, 0.97);
+}
+html[data-theme="dark"] {
+  --panel-bg: rgba(7, 27, 58, 0.78);
+  --panel-bg-strong: rgba(9, 34, 70, 0.91);
+  --panel-bg-soft: rgba(11, 39, 77, 0.80);
+  --panel-border: rgba(178, 205, 248, 0.16);
+  --panel-border-strong: rgba(178, 205, 248, 0.28);
+  --panel-shadow: 0 28px 90px rgba(0, 7, 21, 0.34);
+  --card-panel: rgba(10, 35, 72, 0.91);
+  --card-panel-hover: rgba(13, 43, 84, 0.97);
+}
+
+/* Keep the moving field visible throughout every public page. */
+main,
+.skills-page main,
+.section,
+.section.white,
+.section.alt,
+.section.black,
+.contact,
+.page-hero,
+.skills-hero,
+.case-hero,
+.project-detail-loading,
+.project-not-found,
+.project-gallery-section,
+.emulator-section {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* A subtle tint prevents the moving field from becoming visually noisy. */
+.ambient-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ambient-base) 22%, transparent),
+    transparent 22%,
+    transparent 78%,
+    color-mix(in srgb, var(--ambient-base) 18%, transparent)
+  );
+}
+
+/* Main readable surfaces. Each section remains transparent around the panel. */
+.section > .container,
+.contact > .container,
+.page-hero > .container,
+.skills-hero > .container,
+.case-hero > .container,
+.project-detail-loading > .container,
+.project-not-found > .container,
+.project-gallery-section > .container,
+.emulator-section > .container {
+  position: relative;
+  z-index: 1;
+  padding: clamp(26px, 4.1vw, 52px);
+  border: 1px solid var(--panel-border);
+  border-radius: clamp(24px, 3vw, 38px);
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  -webkit-backdrop-filter: blur(22px) saturate(128%);
+  backdrop-filter: blur(22px) saturate(128%);
+}
+
+/* Keep visual rhythm between floating section panels. */
+.section,
+.contact,
+.page-hero,
+.skills-hero,
+.case-hero,
+.project-detail-loading,
+.project-not-found,
+.project-gallery-section,
+.emulator-section {
+  padding-inline: 0;
+}
+.section + .section,
+.section + .contact,
+.page-hero + .section,
+.skills-hero + .section,
+.case-hero + .section,
+.section + .emulator-section {
+  border-top: 0;
+}
+
+/* Hero keeps its identity, while its grid/glow now feels connected to the page field. */
+.hero {
+  box-shadow: inset 0 -1px 0 rgba(169, 204, 255, 0.10);
+}
+.hero::before { opacity: 0.78; }
+
+/* Project cards are self-contained readable glass boxes. */
+.project-card-link {
+  padding: 12px 12px 20px;
+  border: 1px solid var(--panel-border);
+  border-radius: calc(var(--radius-md) + 10px);
+  background: var(--card-panel);
+  box-shadow: 0 18px 52px rgba(13, 30, 62, 0.10);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+  transition: transform .28s ease, border-color .28s ease, background .28s ease, box-shadow .28s ease;
+}
+.project-card:hover .project-card-link {
+  transform: translateY(-5px);
+  border-color: var(--panel-border-strong);
+  background: var(--card-panel-hover);
+  box-shadow: 0 28px 70px rgba(10, 27, 58, 0.16);
+}
+.project-meta { padding-inline: 5px; }
+.project-summary { color: color-mix(in srgb, var(--ink) 72%, var(--muted)); }
+.project-tags span {
+  border-color: var(--panel-border);
+  background: var(--panel-bg-soft);
+  color: color-mix(in srgb, var(--ink) 68%, var(--muted));
+}
+
+/* About copy and section introductions retain contrast over every moving frame. */
+.about-side,
+.section-intro,
+.case-hero-grid > p,
+.case-overview-grid > p,
+.skill-card p,
+.case-card p,
+.emulator-grid p {
+  color: color-mix(in srgb, var(--ink) 70%, var(--muted));
+}
+
+/* Stronger cards for skills and case-study text. */
+.skill-card,
+.case-card,
+.project-gallery figure,
+.loading-state,
+.empty-state {
+  border-color: var(--panel-border);
+  background: var(--panel-bg-strong);
+  box-shadow: 0 16px 48px rgba(12, 29, 60, 0.10);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+.skill-chip,
+.case-tech-list span {
+  border: 1px solid var(--panel-border);
+}
+
+/* Contact information becomes four obvious, readable mini-cards. */
+.contact-details { gap: 14px; }
+.contact-details > div {
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 18px;
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  background: var(--panel-bg-strong);
+  box-shadow: 0 14px 38px rgba(13, 30, 62, 0.08);
+}
+.contact-details strong { font-size: 15px; line-height: 1.45; }
+.contact-line { background: var(--panel-border-strong); }
+
+/* Inner-page hero and project overview stay legible without hiding the field. */
+.page-hero > .container,
+.skills-hero > .container,
+.case-hero > .container {
+  background: var(--panel-bg-strong);
+}
+.case-cover {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg-strong);
+}
+.case-tech {
+  border-top-color: var(--panel-border-strong);
+}
+
+/* The live-demo block remains dark, but is now a contained panel instead of a full opaque section. */
+.emulator-section { color: var(--ink); }
+.emulator-section > .container {
+  color: #fff;
+  background: rgba(3, 12, 28, 0.90);
+  border-color: rgba(171, 204, 255, 0.18);
+  box-shadow: 0 35px 100px rgba(0, 5, 17, 0.42);
+}
+.emulator-grid p { color: rgba(255,255,255,.68); }
+
+/* Footer remains a clear ending surface while matching the navy field. */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(44px, 7vw, 88px);
+  border-top: 1px solid rgba(169, 201, 255, 0.12);
+  background: color-mix(in srgb, var(--footer-bg) 94%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  backdrop-filter: blur(24px) saturate(125%);
+}
+
+@media (max-width: 980px) {
+  .section > .container,
+  .contact > .container,
+  .page-hero > .container,
+  .skills-hero > .container,
+  .case-hero > .container,
+  .project-detail-loading > .container,
+  .project-not-found > .container,
+  .project-gallery-section > .container,
+  .emulator-section > .container {
+    padding: clamp(22px, 4vw, 36px);
+    border-radius: 28px;
+  }
+}
+
+@media (max-width: 680px) {
+  .section,
+  .contact,
+  .page-hero,
+  .skills-hero,
+  .case-hero,
+  .project-detail-loading,
+  .project-not-found,
+  .project-gallery-section,
+  .emulator-section {
+    padding-block: 42px;
+  }
+  .section > .container,
+  .contact > .container,
+  .page-hero > .container,
+  .skills-hero > .container,
+  .case-hero > .container,
+  .project-detail-loading > .container,
+  .project-not-found > .container,
+  .project-gallery-section > .container,
+  .emulator-section > .container {
+    width: min(calc(100% - 20px), var(--max));
+    padding: 22px 18px;
+    border-radius: 23px;
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    backdrop-filter: blur(18px) saturate(120%);
+  }
+  .project-card-link { padding: 9px 9px 16px; border-radius: 25px; }
+  .contact-details > div { min-height: 88px; padding: 15px; }
+  .ambient-background::after {
+    background: color-mix(in srgb, var(--ambient-base) 12%, transparent);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .section > .container,
+  .contact > .container,
+  .page-hero > .container,
+  .skills-hero > .container,
+  .case-hero > .container,
+  .project-card-link,
+  .skill-card,
+  .case-card,
+  .contact-details > div {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
