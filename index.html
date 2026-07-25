@@ -5,11 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Youssef Ali Kamal — Flutter developer portfolio.">
   <meta name="theme-color" content="#061a3a">
+  <script>
+    (() => {
+      try {
+        const language = localStorage.getItem("portfolio-language") === "ar" ? "ar" : "en";
+        const savedTheme = localStorage.getItem("portfolio-theme");
+        const theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.dataset.theme = theme;
+      } catch (_) {}
+      document.documentElement.classList.add("js");
+    })();
+  </script>
   <title>Youssef Ali Kamal — Flutter Developer</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body data-page="home" id="top">
+<body class="has-splash" data-page="home" id="top">
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  <div class="splash-screen" id="splash-screen" aria-hidden="true">
+    <div class="splash-grid"></div>
+    <div class="splash-orbit splash-orbit-one"></div>
+    <div class="splash-orbit splash-orbit-two"></div>
+    <div class="splash-content">
+      <div class="splash-phone" aria-hidden="true">
+        <span class="splash-phone-notch"></span>
+        <div class="splash-phone-screen">
+          <div class="splash-code-mark"><span>&lt;</span><strong>Y</strong><span>/&gt;</span></div>
+          <div class="splash-flutter-mark"><i></i><i></i></div>
+        </div>
+      </div>
+      <p class="splash-kicker splash-en">DESIGN · CODE · MOBILE</p>
+      <p class="splash-kicker splash-ar">تصميم · برمجة · موبايل</p>
+      <div class="splash-name splash-en"><span>Youssef</span><strong>Ali Kamal</strong></div>
+      <div class="splash-name splash-ar"><span>يوسف</span><strong>علي كمال</strong></div>
+      <p class="splash-role splash-en">Flutter Developer</p>
+      <p class="splash-role splash-ar">مطور Flutter</p>
+      <div class="splash-loader"><span></span></div>
+    </div>
+  </div>
   <div class="site-shell">
     <header class="topbar overlay">
       <div class="container topbar-inner">
@@ -126,6 +163,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/site.js"></script>
+  <script src="js/animations.js"></script>
   <script src="js/public.js"></script>
 </body>
 </html>

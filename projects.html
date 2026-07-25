@@ -5,11 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Selected Flutter and mobile development projects by Youssef Ali Kamal.">
   <meta name="theme-color" content="#f4f5f7">
+  <script>
+    (() => {
+      try {
+        const language = localStorage.getItem("portfolio-language") === "ar" ? "ar" : "en";
+        const savedTheme = localStorage.getItem("portfolio-theme");
+        const theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.dataset.theme = theme;
+      } catch (_) {}
+      document.documentElement.classList.add("js");
+    })();
+  </script>
   <title>Projects — Youssef Ali Kamal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body data-page="projects" id="top">
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
   <header class="topbar">
     <div class="container topbar-inner">
       <div class="header-right">
@@ -30,7 +46,7 @@
 
   <main>
     <section class="page-hero">
-      <div class="container">
+      <div class="container page-enter-group">
         <div class="eyebrow" data-i18n="projects.eyebrow">Projects archive</div>
         <h1 data-i18n="projects.title">Useful products and thoughtful mobile experiences</h1>
         <p class="section-intro" data-i18n="projects.intro">Mobile applications and systems shaped by real requirements, technical challenges, and a strong focus on usability.</p>
@@ -45,7 +61,7 @@
 
     <section class="contact" id="contact">
       <div class="container">
-        <div class="contact-top">
+        <div class="contact-top reveal">
           <div><div class="eyebrow" data-i18n="contact.eyebrow">Available for opportunities</div><h2 data-i18n="contact.title">Have a project or opportunity? Let’s talk.</h2></div>
           <a class="contact-orbit" href="https://wa.me/201013309940" target="_blank" rel="noreferrer" data-i18n="contact.whatsapp">Chat on WhatsApp</a>
         </div>
@@ -73,6 +89,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/site.js"></script>
+  <script src="js/animations.js"></script>
   <script src="js/public.js"></script>
 </body>
 </html>
