@@ -884,3 +884,174 @@ html[data-theme="dark"] .skill-card:hover { box-shadow: 0 28px 75px rgba(0,0,0,.
   .page-enter-group > * { opacity: 1 !important; translate: 0 0 !important; scale: 1 !important; filter: none !important; }
   .hero::before, .contact-orbit::before, .back-to-top span { animation: none !important; }
 }
+
+/* V12 — responsive navigation redesign */
+@media (min-width: 761px) and (max-width: 980px) {
+  .menu-toggle { display: none; }
+  .nav {
+    position: static;
+    inset: auto;
+    z-index: auto;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav a {
+    width: auto;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+  }
+  .nav a.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .topbar.overlay .nav a.active {
+    background: #fff;
+    border-color: #fff;
+    color: #07152d;
+  }
+}
+
+@media (max-width: 760px) {
+  body.nav-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 54;
+    background: rgba(1, 8, 20, 0.48);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    animation: navBackdropIn 0.2s ease both;
+  }
+
+  body.nav-open .topbar { z-index: 70; }
+  body.nav-open .menu-toggle { position: relative; z-index: 73; }
+
+  .menu-toggle {
+    display: inline-grid;
+    font-size: 0;
+  }
+  .menu-toggle::before {
+    content: "☰";
+    font-size: 20px;
+    line-height: 1;
+  }
+  .menu-toggle[aria-expanded="true"]::before {
+    content: "×";
+    font-size: 27px;
+    font-weight: 400;
+  }
+
+  .nav {
+    position: fixed;
+    top: 66px;
+    inset-inline: auto 12px;
+    z-index: 72;
+    display: grid;
+    gap: 0;
+    width: min(300px, calc(100vw - 24px));
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 20px;
+    background:
+      linear-gradient(145deg, rgba(10, 31, 65, 0.98), rgba(4, 16, 37, 0.99));
+    color: #fff;
+    box-shadow: 0 24px 70px rgba(0, 5, 20, 0.42);
+    transform: translateY(-8px) scale(0.975);
+    transform-origin: top right;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: transform 0.22s ease, opacity 0.18s ease;
+  }
+  html[dir="rtl"] .nav {
+    inset-inline: 12px auto;
+    transform-origin: top left;
+  }
+  .nav.open {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav a {
+    position: relative;
+    width: 100%;
+    min-height: 54px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    color: rgba(255,255,255,0.82);
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 1;
+    transform: none;
+  }
+  .nav a:last-child { border-bottom-color: transparent; }
+  .nav a::before {
+    width: 25px;
+    flex: 0 0 25px;
+    color: rgba(255,255,255,0.42);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .nav a:nth-child(1)::before { content: "01"; }
+  .nav a:nth-child(2)::before { content: "02"; }
+  .nav a:nth-child(3)::before { content: "03"; }
+  .nav a:nth-child(4)::before { content: "04"; }
+  .nav a::after {
+    content: "↗";
+    margin-inline-start: auto;
+    color: rgba(255,255,255,0.38);
+    font-size: 15px;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  html[dir="rtl"] .nav a::after { transform: scaleX(-1); }
+  .nav a:hover {
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    transform: none;
+  }
+  .nav a:hover::after { color: #fff; transform: translate(2px,-2px); }
+  html[dir="rtl"] .nav a:hover::after { transform: scaleX(-1) translate(2px,-2px); }
+  .nav a.active,
+  .topbar.overlay .nav a.active {
+    background: rgba(120, 144, 255, 0.16);
+    border-color: transparent;
+    color: #fff;
+  }
+  .nav a.active::before { color: #91a3ff; }
+  .nav a.active::after { color: #91a3ff; }
+}
+
+@media (max-width: 390px) {
+  .nav {
+    top: 62px;
+    inset-inline-end: 8px;
+    width: min(284px, calc(100vw - 16px));
+    border-radius: 18px;
+  }
+  html[dir="rtl"] .nav { inset-inline-start: 8px; }
+}
+
+@keyframes navBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

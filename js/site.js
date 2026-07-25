@@ -217,8 +217,13 @@
       button.textContent = open ? "×" : "☰";
     });
     nav.querySelectorAll("a").forEach(link => link.addEventListener("click", close));
+    document.addEventListener("pointerdown", event => {
+      if (!nav.classList.contains("open")) return;
+      if (nav.contains(event.target) || button.contains(event.target)) return;
+      close();
+    });
     document.addEventListener("keydown", event => { if (event.key === "Escape") close(); });
-    window.addEventListener("resize", () => { if (window.innerWidth > 980) close(); });
+    window.addEventListener("resize", () => { if (window.innerWidth > 760) close(); });
   }
 
   function observeReveals() {
