@@ -59,7 +59,9 @@
       demoMissing: "ستظل شاشة التجربة ظاهرة، وعند إضافة رابط Live Demo من لوحة التحكم سيعمل التطبيق داخلها تلقائيًا.",
       demoWaiting: "Live Demo قريبًا",
       demoWaitingText: "لم تتم إضافة رابط النسخة التجريبية لهذا المشروع بعد.",
-      openNewTab: "فتح النسخة في صفحة جديدة"
+      openNewTab: "فتح النسخة في صفحة جديدة",
+      tapToStart: "اضغط لتشغيل التطبيق",
+      loadingDemo: "جارٍ تشغيل التطبيق…"
     } : {
       notFound: "Project not found",
       notFoundText: "The project may be hidden or the link may be incorrect.",
@@ -84,7 +86,9 @@
       demoMissing: "The demo screen stays visible. Once a Live Demo URL is added in the dashboard, the application will run here automatically.",
       demoWaiting: "Live demo coming soon",
       demoWaitingText: "A live demo URL has not been added for this project yet.",
-      openNewTab: "Open demo in a new tab"
+      openNewTab: "Open demo in a new tab",
+      tapToStart: "Tap to start the application",
+      loadingDemo: "Starting application…"
     };
   }
 
@@ -165,12 +169,37 @@
             <div class="device-frame">
               <div class="device-speaker"></div>
               ${liveUrl
-                ? `<iframe src="${escapeHtml(liveUrl)}" title="${escapeHtml(title)} live demo" allow="clipboard-read; clipboard-write; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`
+                ? `<iframe class="device-demo-frame" data-src="${escapeHtml(liveUrl)}" title="${escapeHtml(title)} live demo" allow="clipboard-read; clipboard-write; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                   <button class="device-launch" type="button" aria-label="${escapeHtml(copy.tapToStart)}">
+                     <span class="device-launch-icon" aria-hidden="true">▶</span>
+                     <strong>${escapeHtml(copy.tapToStart)}</strong>
+                     <small>Live Demo</small>
+                   </button>`
                 : `<div class="device-empty"><span>APP DEMO</span><strong>${escapeHtml(copy.demoWaiting)}</strong><small>${escapeHtml(copy.demoWaitingText)}</small></div>`}
             </div>
           </div>
         </div>
       </section>`;
+
+    const launchButton = root.querySelector(".device-launch");
+    const demoFrame = root.querySelector(".device-demo-frame");
+    if (launchButton && demoFrame) {
+      launchButton.addEventListener("click", () => {
+        const source = demoFrame.dataset.src || "";
+        if (!source) return;
+        launchButton.classList.add("loading");
+        launchButton.querySelector("strong").textContent = copy.loadingDemo;
+        demoFrame.src = source;
+        demoFrame.addEventListener("load", () => {
+          launchButton.classList.add("hidden");
+          demoFrame.classList.add("active");
+        }, { once: true });
+        window.setTimeout(() => {
+          launchButton.classList.add("hidden");
+          demoFrame.classList.add("active");
+        }, 7000);
+      });
+    }
   }
 
   document.addEventListener("DOMContentLoaded", async () => {
