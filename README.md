@@ -112,3 +112,6 @@ The animated ambient field is visible across all public pages. Each content sect
 
 ## V15 CV upload
 Run `sql/migration-v4-cv.sql` once in Supabase SQL Editor, then use the Portfolio CV panel in `/admin/`.
+
+## V16 design update
+The hero summary is now a compact editorial rail aligned to the content edge and is hidden on narrow phones to keep the portrait uncluttered.

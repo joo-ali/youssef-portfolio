@@ -1610,3 +1610,60 @@ body.nav-open::before { display: none !important; content: none !important; -web
   html[dir="rtl"] .nav a.active { box-shadow: inset -3px 0 0 var(--accent); }
   .hero-copy-top { padding: 11px 13px; border-radius: 15px; }
 }
+
+/* V16 — reposition the hero summary as a quiet editorial rail. */
+.hero-copy-top {
+  top: 132px;
+  inset-inline-start: max(24px, calc((100vw - var(--max)) / 2));
+  inset-inline-end: auto;
+  width: min(330px, calc(100vw - 48px));
+  padding: 6px 0 6px 18px;
+  border: 0;
+  border-inline-start: 2px solid rgba(103, 129, 255, 0.92);
+  border-radius: 0;
+  background: linear-gradient(90deg, rgba(4, 25, 59, 0.44), rgba(4, 25, 59, 0));
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  text-align: start;
+  color: rgba(232, 241, 255, 0.82);
+  font-size: 13px;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+html[dir="rtl"] .hero-copy-top {
+  padding: 6px 18px 6px 0;
+  background: linear-gradient(270deg, rgba(4, 25, 59, 0.44), rgba(4, 25, 59, 0));
+}
+
+@media (max-width: 980px) {
+  .hero-copy-top {
+    top: 104px;
+    inset-inline-start: 22px;
+    inset-inline-end: auto;
+    width: min(290px, calc(100vw - 44px));
+    padding: 5px 0 5px 15px;
+    font-size: 12.5px;
+  }
+  html[dir="rtl"] .hero-copy-top { padding: 5px 15px 5px 0; }
+}
+
+@media (max-width: 760px) {
+  .hero-copy-top {
+    top: 88px;
+    inset-inline-start: 16px;
+    inset-inline-end: auto;
+    width: min(255px, calc(100vw - 32px));
+    padding: 4px 0 4px 13px;
+    border-radius: 0;
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+  html[dir="rtl"] .hero-copy-top { padding: 4px 13px 4px 0; }
+}
+
+/* On narrow phones the role, name and hero title already tell the story;
+   removing the secondary paragraph keeps the portrait and controls uncluttered. */
+@media (max-width: 520px) {
+  .hero-copy-top { display: none; }
+}
