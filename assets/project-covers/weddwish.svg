@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">WeddWish mobile and web project preview</title><desc id="desc">A polished mobile and web interface mockup for the WeddWish gift platform.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7ef"/><stop offset=".55" stop-color="#f5e0c6"/><stop offset="1" stop-color="#7e5a36"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7dc9d"/><stop offset="1" stop-color="#a9762e"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="24" stdDeviation="26" flood-opacity=".22"/></filter>
+</defs>
+<rect width="1600" height="900" rx="48" fill="url(#bg)"/>
+<circle cx="1420" cy="120" r="270" fill="#fff" opacity=".28"/><circle cx="170" cy="780" r="330" fill="#fff" opacity=".18"/>
+<g filter="url(#shadow)">
+  <rect x="140" y="155" width="830" height="520" rx="30" fill="#fff"/>
+  <rect x="140" y="155" width="830" height="70" rx="30" fill="#fffaf4"/><circle cx="185" cy="190" r="9" fill="#d9a95d"/><circle cx="215" cy="190" r="9" fill="#ead8bb"/><circle cx="245" cy="190" r="9" fill="#ead8bb"/>
+  <rect x="205" y="280" width="350" height="28" rx="14" fill="#4b3420"/><rect x="205" y="330" width="520" height="17" rx="8" fill="#d5c1a4"/><rect x="205" y="365" width="455" height="17" rx="8" fill="#e1d1bb"/>
+  <rect x="205" y="430" width="235" height="160" rx="24" fill="#fbf1e4"/><rect x="465" y="430" width="235" height="160" rx="24" fill="#f2e4d0"/><rect x="725" y="430" width="170" height="160" rx="24" fill="url(#gold)"/>
+  <path d="M290 502c0-31 38-47 60-25 22-22 60-6 60 25 0 39-60 74-60 74s-60-35-60-74z" fill="#b88742"/>
+</g>
+<g filter="url(#shadow)">
+  <rect x="1040" y="92" width="330" height="716" rx="58" fill="#17130f"/>
+  <rect x="1060" y="126" width="290" height="650" rx="42" fill="#fffaf4"/>
+  <rect x="1154" y="105" width="104" height="16" rx="8" fill="#3a3028"/>
+  <circle cx="1205" cy="240" r="68" fill="url(#gold)"/><path d="M1167 243c0-19 24-29 38-15 14-14 38-4 38 15 0 25-38 46-38 46s-38-21-38-46z" fill="#fff"/>
+  <rect x="1107" y="340" width="200" height="22" rx="11" fill="#52391f"/><rect x="1107" y="382" width="155" height="14" rx="7" fill="#d9c5aa"/>
+  <rect x="1107" y="445" width="200" height="82" rx="20" fill="#f4e8d8"/><rect x="1107" y="548" width="200" height="82" rx="20" fill="#f4e8d8"/><rect x="1107" y="666" width="200" height="44" rx="22" fill="#a9762e"/>
+</g>
+<g fill="#4c3420" font-family="Arial, sans-serif"><text x="140" y="785" font-size="38" font-weight="700">WeddWish</text><text x="140" y="830" font-size="22" opacity=".7">Flutter • Web • Authentication • Gift profiles</text></g>
+</svg>

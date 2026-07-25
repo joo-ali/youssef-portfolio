@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Portfolio Dashboard Login</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="admin-brand">◉ Private Dashboard</div>
+    <h1>Welcome back</h1>
+    <p>Sign in with the authorized admin account to manage projects. There is no public registration.</p>
+
+    <div id="setup-notice" class="notice hidden"></div>
+    <div id="login-message" class="notice error hidden"></div>
+
+    <form id="login-form" class="login-form" autocomplete="on">
+      <div class="field">
+        <label for="email">Admin email</label>
+        <input id="email" name="email" type="email" value="yo231415@gmail.com" autocomplete="username" required readonly>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+      </div>
+      <button id="login-button" class="btn primary" type="submit">Sign in securely</button>
+    </form>
+    <a class="back-link" href="../index.html">← Back to portfolio</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/admin-login.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Manage Projects — Portfolio Dashboard</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="admin-topbar">
+      <a class="admin-brand" href="../index.html">◉ Portfolio Dashboard</a>
+      <div class="admin-user"><span id="admin-email">Checking session…</span><button id="logout-button" class="btn ghost" type="button">Log out</button></div>
+    </header>
+
+    <main class="admin-main">
+      <div class="admin-heading">
+        <div><h1>Manage projects</h1><p>Add, edit, publish, hide, reorder, and delete portfolio projects.</p></div>
+        <button id="new-project-button" class="btn primary" type="button">+ New project</button>
+      </div>
+
+      <div id="dashboard-message" class="notice hidden"></div>
+
+      <div class="admin-grid">
+        <section class="panel">
+          <div class="panel-head"><h2>Your projects</h2><button id="refresh-button" class="btn ghost" type="button">Refresh</button></div>
+          <div class="panel-body"><div id="projects-list" class="projects-list"><div class="spinner"></div></div></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h2 id="form-title">Add project</h2><span id="editing-status" class="status">New</span></div>
+          <div class="panel-body">
+            <form id="project-form">
+              <input type="hidden" id="project-id">
+              <input type="hidden" id="existing-cover-url">
+              <input type="hidden" id="existing-gallery-urls">
+              <div class="form-grid">
+                <div class="field full"><label for="title">Project title *</label><input id="title" required maxlength="100" placeholder="WeddWish"></div>
+                <div class="field full"><label for="short-description">Short description *</label><textarea id="short-description" required maxlength="320" placeholder="A short summary shown on project cards."></textarea></div>
+                <div class="field full"><label for="description">Full description</label><textarea id="description" placeholder="Project goals, product details, and your contribution."></textarea></div>
+                <div class="field full"><label for="role">Your role</label><input id="role" placeholder="Flutter Developer — Authentication & Routing"></div>
+                <div class="field full"><label for="challenge">Challenge and solution</label><textarea id="challenge" placeholder="What was difficult and how did you solve it?"></textarea></div>
+                <div class="field full"><label for="result">Result and impact</label><textarea id="result" placeholder="What changed or improved after your work?"></textarea></div>
+                <div class="field full"><label for="technologies">Technologies (comma separated)</label><input id="technologies" placeholder="Flutter, Firebase, Cubit, REST API"></div>
+
+                <div class="field full">
+                  <details class="language-fields">
+                    <summary>Arabic project content (optional)</summary>
+                    <div class="form-grid arabic-fields" dir="rtl">
+                      <div class="field full"><label for="title-ar">عنوان المشروع بالعربية</label><input id="title-ar" maxlength="100" placeholder="ويد ويش"></div>
+                      <div class="field full"><label for="short-description-ar">الوصف المختصر بالعربية</label><textarea id="short-description-ar" maxlength="320" placeholder="وصف مختصر يظهر في كارت المشروع"></textarea></div>
+                      <div class="field full"><label for="description-ar">الوصف الكامل بالعربية</label><textarea id="description-ar" placeholder="أهداف المشروع وتفاصيل المنتج ومساهمتك"></textarea></div>
+                      <div class="field full"><label for="role-ar">دورك بالعربية</label><input id="role-ar" placeholder="مطور Flutter — المصادقة والتنقل"></div>
+                      <div class="field full"><label for="challenge-ar">التحدي والحل بالعربية</label><textarea id="challenge-ar" placeholder="ما التحدي وكيف حللته؟"></textarea></div>
+                      <div class="field full"><label for="result-ar">النتيجة والتأثير بالعربية</label><textarea id="result-ar" placeholder="ما الذي تحسن بعد عملك؟"></textarea></div>
+                      <div class="field full"><label for="technologies-ar">التقنيات بالعربية (افصل بفاصلة)</label><input id="technologies-ar" placeholder="Flutter, Firebase, Cubit"></div>
+                    </div>
+                  </details>
+                </div>
+
+                <div class="field"><label for="github-url">GitHub URL</label><input id="github-url" type="url" placeholder="https://github.com/..."></div>
+                <div class="field"><label for="live-url">Live demo URL</label><input id="live-url" type="url" placeholder="https://your-flutter-web-demo.com"></div>
+                <div class="field full field-note">The live demo URL is also used automatically inside the phone emulator on the project page.</div>
+                <div class="field"><label for="sort-order">Display order</label><input id="sort-order" type="number" min="0" step="1" value="0"></div>
+                <div class="field"><label>Visibility</label><div class="check-row"><label class="check"><input id="featured" type="checkbox"> Featured</label><label class="check"><input id="published" type="checkbox" checked> Published</label></div></div>
+                <div class="field full">
+                  <label for="cover-file">Project cover</label>
+                  <div class="upload-box">
+                    <img id="cover-preview" class="upload-preview hidden" alt="Project cover preview">
+                    <input id="cover-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+                    <div style="margin-top:8px">Recommended ratio: 16:9, WebP/JPG under 2 MB.</div>
+                  </div>
+                </div>
+                <div class="field full screenshots-field">
+                  <div class="screenshots-heading">
+                    <div><label for="gallery-files">Project screenshots</label><p>Choose multiple screenshots to show in the project gallery.</p></div>
+                    <strong id="gallery-count">0 / 8</strong>
+                  </div>
+                  <div class="upload-box screenshots-upload-box">
+                    <label class="file-picker" for="gallery-files">+ Choose screenshots</label>
+                    <input id="gallery-files" class="visually-hidden-file" type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif">
+                    <div class="upload-help">PNG, JPG, WebP or GIF. Maximum 8 images, 5 MB each.</div>
+                    <div id="gallery-preview" class="gallery-preview"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions"><button id="delete-button" class="btn danger hidden" type="button">Delete</button><button id="reset-button" class="btn ghost" type="button">Clear</button><button id="save-button" class="btn primary" type="submit">Save project</button></div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>
