@@ -95,3 +95,7 @@ The public dark theme now uses the navy color family from the home hero instead 
 - Inter for English body text.
 - IBM Plex Sans Arabic for Arabic text.
 - Reduced oversized headings and improved mobile type scale.
+
+
+## V11 hero contrast
+Added a navy fade behind the hero typography plus a subtle dark stroke/shadow so the white title stays readable over the white shirt.

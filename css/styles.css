@@ -210,7 +210,19 @@ main, section, article, div { min-width: 0; }
   box-shadow: 0 0 110px rgba(0, 74, 177, 0.48);
   transition: transform 0.18s ease-out;
 }
-.hero-title-wrap { position: relative; z-index: 4; width: 100%; padding: 0 0 44px; }
+.hero-title-wrap {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  padding: 70px 0 44px;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 11, 25, 0) 0%,
+    rgba(2, 11, 25, 0.30) 22%,
+    rgba(2, 11, 25, 0.84) 66%,
+    #061a3a 100%
+  );
+}
 .hero-kicker { margin-bottom: 16px; color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600; letter-spacing: 0.17em; text-transform: uppercase; }
 .hero-title {
   max-width: 100%;
@@ -222,7 +234,11 @@ main, section, article, div { min-width: 0; }
   letter-spacing: -0.055em;
   text-wrap: balance;
   overflow-wrap: normal;
-  text-shadow: 0 14px 55px rgba(0,0,0,0.25);
+  -webkit-text-stroke: 0.65px rgba(0, 8, 24, 0.82);
+  paint-order: stroke fill;
+  text-shadow:
+    0 2px 0 rgba(0, 8, 24, 0.95),
+    0 12px 42px rgba(0, 0, 0, 0.62);
 }
 html[dir="rtl"] .hero-title { letter-spacing: -0.035em; }
 .hero-bottom { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-top: 32px; }
@@ -466,9 +482,28 @@ html[dir="rtl"] .project-card:hover .arrow-dot { transform: scaleX(-1) rotate(-3
   .hero-copy-top { top: 84px; inset-inline: 14px; width: min(290px, calc(100% - 28px)); text-align: start; font-size: 12px; line-height: 1.55; }
   .hero::after { width: 122vw; bottom: 10%; }
   .hero-portrait { width: min(108vw, 570px); height: 66vh; bottom: 88px; object-position: center 15%; border-radius: 44% 44% 0 0 / 25% 25% 0 0; }
-  .hero-title-wrap { padding-bottom: max(25px, env(safe-area-inset-bottom)); }
+  .hero-title-wrap {
+    padding: 58px 0 max(25px, env(safe-area-inset-bottom));
+    background: linear-gradient(
+      to bottom,
+      rgba(2, 11, 25, 0) 0%,
+      rgba(2, 11, 25, 0.42) 18%,
+      rgba(2, 11, 25, 0.94) 60%,
+      #061a3a 100%
+    );
+  }
   .hero-kicker { margin-bottom: 10px; font-size: 10px; letter-spacing: 0.13em; }
-  .hero-title { max-width: 100%; font-size: clamp(46px, 13vw, 58px); line-height: 0.94; letter-spacing: -0.045em; overflow-wrap: normal; }
+  .hero-title {
+    max-width: 100%;
+    font-size: clamp(46px, 13vw, 58px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    overflow-wrap: normal;
+    -webkit-text-stroke-width: 0.9px;
+    text-shadow:
+      0 2px 0 rgba(0, 8, 24, 1),
+      0 8px 26px rgba(0, 0, 0, 0.82);
+  }
   .hero-bottom { margin-top: 17px; }
   .hero-name { font-size: 22px; }
   .hero-scroll { display: none; }
