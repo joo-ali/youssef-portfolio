@@ -88,3 +88,10 @@ The splash appears on every full load of the home page. Add `?intro=0` to skip i
 
 ## V8 theme update
 The public dark theme now uses the navy color family from the home hero instead of pure black.
+
+
+## V10 typography test
+- Space Grotesk for English display headings.
+- Inter for English body text.
+- IBM Plex Sans Arabic for Arabic text.
+- Reduced oversized headings and improved mobile type scale.
