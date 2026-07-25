@@ -1,1 +1,82 @@
-# youssef-portfolio
+# Portfolio Dashboard Site — V5
+
+This version keeps the phone demo frame visible for every project. When a **Live Demo URL** is saved in the private dashboard, that URL loads as an interactive application inside the phone frame. When no URL is available, the frame remains visible with a small coming-soon state.
+
+# Youssef Portfolio + Private Dashboard — Version 3
+
+Responsive bilingual portfolio based on the supplied Figma direction.
+
+## Included
+
+- Responsive Home, Projects, Skills, and Project Details pages
+- Mobile-first layout tested at 320px, 390px, 768px, 944px, 1366px, and 1440px widths
+- Light and dark themes with saved preference
+- English and Arabic with RTL support and saved preference
+- Localized project fields editable from the private dashboard
+- Supabase-powered projects, authentication, database, and image storage
+- Private `/admin` dashboard restricted to `yo231415@gmail.com`
+- Add, edit, delete, publish, hide, feature, and reorder projects
+- Project cover and gallery uploads
+- GitHub, live-demo, and Flutter Web/emulator live demo URLs
+
+## Run locally on Windows
+
+1. Close any older portfolio server window using `Ctrl+C`.
+2. Double-click `run-local.bat`.
+3. Keep the terminal window open.
+4. Open:
+
+```text
+http://127.0.0.1:5500
+```
+
+Private dashboard:
+
+```text
+http://127.0.0.1:5500/admin/login.html
+```
+
+## Supabase update for Version 3
+
+The existing database already has Version 1 and Version 2. Open:
+
+**Supabase → SQL Editor → New query**
+
+Run the complete contents of:
+
+```text
+sql/migration-v3.sql
+```
+
+This adds Arabic project fields:
+
+- `title_ar`
+- `short_description_ar`
+- `description_ar`
+- `role_ar`
+- `challenge_ar`
+- `result_ar`
+- `technologies_ar`
+
+The dashboard then shows an **Arabic project content** section for every project.
+
+## Fresh Supabase setup
+
+For a completely new Supabase project, run `sql/schema.sql` instead. It creates all tables, policies, storage rules, English fields, Arabic fields, and starter projects.
+
+## Security
+
+- There is no public registration page.
+- Dashboard authentication uses Supabase email/password.
+- Row Level Security only allows `yo231415@gmail.com` to insert, update, or delete.
+- Visitors can only read published projects.
+- Use only the browser-safe publishable/anon key in `js/config.js`.
+- Never add the Supabase `service_role` or secret key to browser code.
+
+## Publishing online
+
+Upload the folder contents to a GitHub repository, enable GitHub Pages from the main branch and root folder, then connect a custom domain later from repository **Settings → Pages**.
+
+## Interactive app demo
+
+A normal webpage cannot run an Android APK directly. Build and deploy the application as Flutter Web, then save its deployed URL in the dashboard under **Live demo URL (also used in the phone emulator)**. It will appear inside the phone frame on the project-details page.
