@@ -108,3 +108,7 @@ Added a navy fade behind the hero typography plus a subtle dark stroke/shadow so
 ## V14 visual update
 
 The animated ambient field is visible across all public pages. Each content section, project card, skill card, case-study card, contact item, and live-demo area uses a high-contrast translucent panel for readability in both light and navy-dark themes.
+
+
+## V15 CV upload
+Run `sql/migration-v4-cv.sql` once in Supabase SQL Editor, then use the Portfolio CV panel in `/admin/`.

@@ -9,6 +9,11 @@
   const galleryInput = document.getElementById("gallery-files");
   const galleryPreview = document.getElementById("gallery-preview");
   const galleryCount = document.getElementById("gallery-count");
+  const cvInput = document.getElementById("cv-file");
+  const uploadCvButton = document.getElementById("upload-cv-button");
+  const cvFileName = document.getElementById("cv-file-name");
+  const cvUploadStatus = document.getElementById("cv-upload-status");
+  const currentCvLink = document.getElementById("current-cv-link");
   let client;
   let projects = [];
   let currentId = null;
@@ -185,6 +190,64 @@
     return [...currentGalleryUrls, ...uploaded];
   }
 
+
+  function cvPublicUrl() {
+    return client.storage.from("portfolio-media").getPublicUrl("site/cv/Youssef_Ali_Kamal_CV.pdf").data.publicUrl;
+  }
+
+  async function refreshCvStatus() {
+    if (!client || !currentCvLink) return;
+    const url = cvPublicUrl();
+    try {
+      const response = await fetch(`${url}?check=${Date.now()}`, { method: "HEAD", cache: "no-store" });
+      if (response.ok) {
+        currentCvLink.href = url;
+        currentCvLink.classList.remove("hidden");
+        cvUploadStatus.textContent = "A Supabase CV is currently active on the public website.";
+      } else {
+        currentCvLink.classList.add("hidden");
+        cvUploadStatus.textContent = "The bundled CV is active. Upload a PDF to replace it online.";
+      }
+    } catch (_) {
+      currentCvLink.classList.add("hidden");
+    }
+  }
+
+  async function uploadCv() {
+    const file = cvInput?.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      showMessage("Please choose a PDF file.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showMessage("The CV PDF must be 10 MB or smaller.");
+      return;
+    }
+    uploadCvButton.disabled = true;
+    uploadCvButton.textContent = "Uploading…";
+    cvUploadStatus.textContent = "Uploading and replacing the public CV…";
+    try {
+      const { error } = await client.storage.from("portfolio-media").upload(
+        "site/cv/Youssef_Ali_Kamal_CV.pdf",
+        file,
+        { contentType: "application/pdf", cacheControl: "60", upsert: true }
+      );
+      if (error) throw error;
+      cvInput.value = "";
+      cvFileName.textContent = "No new PDF selected";
+      uploadCvButton.disabled = true;
+      showMessage("CV updated successfully. Public download buttons now use the new PDF.", "success");
+      await refreshCvStatus();
+    } catch (error) {
+      const hint = /mime|bucket|allowed/i.test(error.message || "") ? " Run sql/migration-v4-cv.sql in Supabase SQL Editor first." : "";
+      showMessage((error.message || "Unable to upload CV.") + hint);
+    } finally {
+      uploadCvButton.textContent = "Update CV";
+      if (cvInput?.files?.length) uploadCvButton.disabled = false;
+    }
+  }
+
   async function initialize() {
     if (!configured || !window.supabase) {
       showMessage("Supabase is not configured. Add the project URL and publishable key to js/config.js.");
@@ -203,6 +266,7 @@
     try {
       await loadProjects();
       clearForm();
+      await refreshCvStatus();
     } catch (error) {
       showMessage(error.message);
     }
@@ -247,6 +311,7 @@
       showMessage(currentId ? "Project updated successfully." : "Project added successfully.", "success");
       await loadProjects();
       clearForm();
+      await refreshCvStatus();
     } catch (error) {
       const hint = /title_ar|short_description_ar|description_ar|role_ar|challenge_ar|result_ar|technologies_ar/i.test(error.message || "")
         ? " Run sql/migration-v3.sql in Supabase SQL Editor first."
@@ -268,6 +333,7 @@
       showMessage("Project deleted.", "success");
       await loadProjects();
       clearForm();
+      await refreshCvStatus();
     } catch (error) {
       showMessage(error.message);
     } finally {
@@ -302,6 +368,14 @@
       showMessage(error.message);
     }
   });
+
+  if (cvInput) cvInput.addEventListener("change", () => {
+    const file = cvInput.files[0];
+    cvFileName.textContent = file ? file.name : "No new PDF selected";
+    cvUploadStatus.textContent = file ? `${(file.size / 1024 / 1024).toFixed(2)} MB selected` : "PDF only · maximum 10 MB";
+    uploadCvButton.disabled = !file;
+  });
+  if (uploadCvButton) uploadCvButton.addEventListener("click", uploadCv);
 
   document.getElementById("new-project-button").addEventListener("click", clearForm);
   document.getElementById("reset-button").addEventListener("click", clearForm);

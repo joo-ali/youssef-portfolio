@@ -223,6 +223,30 @@
     });
   }
 
+
+  async function setupCvLinks() {
+    const links = [...document.querySelectorAll("[data-cv-link]")];
+    if (!links.length) return;
+    const fallback = "assets/Youssef_Ali_Kamal_CV.pdf";
+    links.forEach(link => { if (!link.getAttribute("href")) link.href = fallback; });
+    const cfg = window.PORTFOLIO_CONFIG || {};
+    if (!window.supabase || !cfg.supabaseUrl || !cfg.supabaseAnonKey || cfg.supabaseUrl.startsWith("YOUR_")) return;
+    try {
+      const cvClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data } = cvClient.storage.from("portfolio-media").getPublicUrl("site/cv/Youssef_Ali_Kamal_CV.pdf");
+      const remoteUrl = data?.publicUrl;
+      if (!remoteUrl) return;
+      const response = await fetch(`${remoteUrl}?check=${Date.now()}`, { method: "HEAD", cache: "no-store" });
+      if (!response.ok) return;
+      links.forEach(link => {
+        link.href = remoteUrl;
+        link.setAttribute("download", "Youssef_Ali_Kamal_CV.pdf");
+      });
+    } catch (_) {
+      // Keep the bundled CV as a reliable fallback.
+    }
+  }
+
   function setupMenu() {
     const button = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".nav");
@@ -297,6 +321,7 @@
     setupAmbientBackground();
     setupControls();
     setupMenu();
+  setupCvLinks();
     setupHeroMotion();
     observeReveals();
   });

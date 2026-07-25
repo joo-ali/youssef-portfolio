@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Manage Projects — Portfolio Dashboard</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/admin.css?v=15">
 </head>
 <body>
   <div class="admin-shell">
@@ -22,6 +22,24 @@
       </div>
 
       <div id="dashboard-message" class="notice hidden"></div>
+
+      <section class="panel cv-manager">
+        <div class="panel-head">
+          <div><h2>Portfolio CV</h2><p>Replace the PDF used by every Download CV button on the public website.</p></div>
+          <a id="current-cv-link" class="btn ghost hidden" href="#" target="_blank" rel="noreferrer">Open current CV</a>
+        </div>
+        <div class="panel-body cv-manager-body">
+          <div class="cv-file-meta">
+            <strong id="cv-file-name">No new PDF selected</strong>
+            <span id="cv-upload-status">PDF only · maximum 10 MB</span>
+          </div>
+          <div class="cv-manager-actions">
+            <label class="file-picker compact" for="cv-file">Choose PDF</label>
+            <input id="cv-file" class="visually-hidden-file" type="file" accept="application/pdf,.pdf">
+            <button id="upload-cv-button" class="btn primary" type="button" disabled>Update CV</button>
+          </div>
+        </div>
+      </section>
 
       <div class="admin-grid">
         <section class="panel">
@@ -96,6 +114,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/config.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/admin.js?v=15"></script>
 </body>
 </html>
