@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Manage Projects — Portfolio Dashboard</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../css/admin.css?v=15">
+  <link rel="stylesheet" href="../css/admin.css?v=17">
 </head>
 <body>
   <div class="admin-shell">
@@ -43,7 +43,13 @@
 
       <div class="admin-grid">
         <section class="panel">
-          <div class="panel-head"><h2>Your projects</h2><button id="refresh-button" class="btn ghost" type="button">Refresh</button></div>
+          <div class="panel-head">
+            <h2>Your projects</h2>
+            <div class="panel-head-actions">
+              <span id="publication-summary" class="publication-summary">Loading…</span>
+              <button id="refresh-button" class="btn ghost" type="button">Refresh</button>
+            </div>
+          </div>
           <div class="panel-body"><div id="projects-list" class="projects-list"><div class="spinner"></div></div></div>
         </section>
 
@@ -82,7 +88,15 @@
                 <div class="field"><label for="live-url">Live demo URL</label><input id="live-url" type="url" placeholder="https://your-flutter-web-demo.com"></div>
                 <div class="field full field-note">The live demo URL is also used automatically inside the phone emulator on the project page.</div>
                 <div class="field"><label for="sort-order">Display order</label><input id="sort-order" type="number" min="0" step="1" value="0"></div>
-                <div class="field"><label>Visibility</label><div class="check-row"><label class="check"><input id="featured" type="checkbox"> Featured</label><label class="check"><input id="published" type="checkbox" checked> Published</label></div></div>
+                <div class="field"><label>Homepage placement</label><div class="check-row"><label class="check"><input id="featured" type="checkbox"> Featured on homepage</label></div></div>
+                <div class="field">
+                  <label>Publication status</label>
+                  <label class="publish-control" for="published">
+                    <input id="published" type="checkbox" checked>
+                    <span class="publish-switch" aria-hidden="true"><span></span></span>
+                    <span class="publish-copy"><strong id="publication-label">Published</strong><small>Visible to portfolio visitors</small></span>
+                  </label>
+                </div>
                 <div class="field full">
                   <label for="cover-file">Project cover</label>
                   <div class="upload-box">
@@ -114,6 +128,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/config.js"></script>
-  <script src="../js/admin.js?v=15"></script>
+  <script src="../js/admin.js?v=17"></script>
 </body>
 </html>

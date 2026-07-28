@@ -115,3 +115,10 @@ Run `sql/migration-v4-cv.sql` once in Supabase SQL Editor, then use the Portfoli
 
 ## V16 design update
 The hero summary is now a compact editorial rail aligned to the content edge and is hidden on narrow phones to keep the portrait uncluttered.
+
+
+## V17 publication controls
+- Every project row in the private dashboard now has a one-click Publish / Unpublish button.
+- Unpublished projects disappear from the homepage, projects page, and direct public project URL.
+- The project form also includes a clear publication-status switch.
+- No database migration is required because the `published` column already exists.

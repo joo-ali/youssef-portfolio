@@ -26,7 +26,7 @@
         const client = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
         const { data, error } = await client.from("projects").select("*").eq("slug", slug).eq("published", true).maybeSingle();
         if (error) throw error;
-        if (data) return data;
+        return data || null;
       } catch (error) {
         console.warn("Unable to load project from Supabase:", error.message);
       }

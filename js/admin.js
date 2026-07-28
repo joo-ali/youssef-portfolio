@@ -14,6 +14,9 @@
   const cvFileName = document.getElementById("cv-file-name");
   const cvUploadStatus = document.getElementById("cv-upload-status");
   const currentCvLink = document.getElementById("current-cv-link");
+  const publishedInput = document.getElementById("published");
+  const publicationLabel = document.getElementById("publication-label");
+  const publicationSummary = document.getElementById("publication-summary");
   let client;
   let projects = [];
   let currentId = null;
@@ -41,6 +44,14 @@
   }
 
   function formValue(id) { return document.getElementById(id).value.trim(); }
+
+  function syncPublicationControl() {
+    if (!publishedInput || !publicationLabel) return;
+    const published = publishedInput.checked;
+    publicationLabel.textContent = published ? "Published" : "Unpublished";
+    const note = publicationLabel.nextElementSibling;
+    if (note) note.textContent = published ? "Visible to portfolio visitors" : "Hidden from the public portfolio";
+  }
 
   function renderGalleryPreview() {
     const existing = currentGalleryUrls.map((url, index) => `
@@ -73,7 +84,8 @@
     currentGalleryUrls = [];
     pendingGalleryFiles = [];
     form.reset();
-    document.getElementById("published").checked = true;
+    publishedInput.checked = true;
+    syncPublicationControl();
     document.getElementById("sort-order").value = projects.length;
     document.getElementById("project-id").value = "";
     document.getElementById("existing-cover-url").value = "";
@@ -113,7 +125,8 @@
     document.getElementById("live-url").value = project.live_url || "";
     document.getElementById("sort-order").value = project.sort_order ?? 0;
     document.getElementById("featured").checked = Boolean(project.featured);
-    document.getElementById("published").checked = Boolean(project.published);
+    publishedInput.checked = Boolean(project.published);
+    syncPublicationControl();
     document.getElementById("existing-cover-url").value = project.cover_url || "";
     document.getElementById("existing-gallery-urls").value = JSON.stringify(currentGalleryUrls);
     if (galleryCount) galleryCount.textContent = `${currentGalleryUrls.length + pendingGalleryFiles.length} / 8`;
@@ -134,22 +147,57 @@
   }
 
   function renderProjects() {
+    const publishedCount = projects.filter(project => project.published).length;
+    const hiddenCount = projects.length - publishedCount;
+    if (publicationSummary) publicationSummary.textContent = `${publishedCount} published · ${hiddenCount} unpublished`;
     if (!projects.length) {
       listRoot.innerHTML = '<div class="empty">No projects yet. Add your first project.</div>';
       return;
     }
     listRoot.innerHTML = projects.map(project => {
       const cover = project.cover_url ? `<img src="${escapeHtml(project.cover_url)}" alt="">` : escapeHtml(project.title.slice(0, 2).toUpperCase());
-      return `<article class="project-row${currentId === project.id ? " active" : ""}" data-id="${project.id}">
+      const action = project.published ? "Unpublish" : "Publish";
+      return `<article class="project-row${currentId === project.id ? " active" : ""}${project.published ? "" : " unpublished"}" data-id="${project.id}">
         <div class="project-thumb">${cover}</div>
-        <div><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(project.short_description || "No description")}</p></div>
-        <span class="status${project.published ? " live" : ""}">${project.published ? "Published" : "Hidden"}</span>
+        <div class="project-row-copy"><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(project.short_description || "No description")}</p></div>
+        <div class="project-row-actions">
+          <span class="status${project.published ? " live" : ""}">${project.published ? "Published" : "Unpublished"}</span>
+          <button class="publish-action${project.published ? " unpublish" : " publish"}" type="button" data-publish-id="${project.id}" data-next-state="${project.published ? "false" : "true"}" aria-label="${action} ${escapeHtml(project.title)}">${action}</button>
+        </div>
       </article>`;
     }).join("");
     listRoot.querySelectorAll(".project-row").forEach(row => row.addEventListener("click", () => {
       const project = projects.find(item => item.id === row.dataset.id);
       if (project) fillForm(project);
     }));
+    listRoot.querySelectorAll("[data-publish-id]").forEach(button => button.addEventListener("click", async event => {
+      event.stopPropagation();
+      await togglePublication(button.dataset.publishId, button.dataset.nextState === "true", button);
+    }));
+  }
+
+  async function togglePublication(projectId, nextState, button) {
+    const project = projects.find(item => item.id === projectId);
+    if (!project || !client) return;
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = nextState ? "Publishing…" : "Hiding…";
+    try {
+      const { error } = await client.from("projects").update({ published: nextState }).eq("id", projectId);
+      if (error) throw error;
+      project.published = nextState;
+      if (currentId === projectId) {
+        publishedInput.checked = nextState;
+        syncPublicationControl();
+        document.getElementById("editing-status").textContent = nextState ? "Published" : "Unpublished";
+      }
+      renderProjects();
+      showMessage(nextState ? `“${project.title}” is now published.` : `“${project.title}” is now hidden from the portfolio.`, "success");
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = originalText;
+      showMessage(error.message || "Unable to change publication status.");
+    }
   }
 
   async function loadProjects() {
@@ -303,7 +351,7 @@
         gallery_urls: galleryUrls,
         sort_order: Number(document.getElementById("sort-order").value) || 0,
         featured: document.getElementById("featured").checked,
-        published: document.getElementById("published").checked
+        published: publishedInput.checked
       };
       const query = currentId ? client.from("projects").update(payload).eq("id", currentId) : client.from("projects").insert(payload);
       const { error } = await query;
@@ -376,6 +424,7 @@
     uploadCvButton.disabled = !file;
   });
   if (uploadCvButton) uploadCvButton.addEventListener("click", uploadCv);
+  if (publishedInput) publishedInput.addEventListener("change", syncPublicationControl);
 
   document.getElementById("new-project-button").addEventListener("click", clearForm);
   document.getElementById("reset-button").addEventListener("click", clearForm);
