@@ -82,33 +82,105 @@
     return project?.[field];
   }
 
-  function cardMarkup(project) {
+  function projectData(project, index, total) {
     const title = localized(project, "title") || project.title || "Project";
     const summary = localized(project, "short_description") || (language() === "ar" ? "افتح المشروع لعرض التفاصيل." : "Open the project to view details.");
     const tech = localized(project, "technologies");
     const technologies = Array.isArray(tech) ? tech : [];
     const slug = getProjectSlug(project);
     const cover = getCover(project);
-    const viewLabel = language() === "ar" ? "عرض المشروع ↗" : "View case study ↗";
     const aria = language() === "ar" ? `عرض تفاصيل مشروع ${title}` : `View ${title} project details`;
-    const techMarkup = technologies.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join("");
+    return { title, summary, technologies, slug, cover, aria, index, total };
+  }
+
+  function luminaMarkup(projects) {
+    const items = projects.map((project, index) => projectData(project, index, projects.length));
+    const first = items[0];
+    const selectedLabel = language() === "ar" ? "مشروع مختار" : "Selected project";
+    const openLabel = language() === "ar" ? "فتح دراسة الحالة" : "Open case study";
+
     return `
-      <article class="project-card reveal">
-        <a class="project-card-link" href="project.html?slug=${encodeURIComponent(slug)}" aria-label="${escapeHtml(aria)}">
-          <div class="project-cover">
-            <img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" loading="lazy">
-            <span class="project-view-label">${escapeHtml(viewLabel)}</span>
+      <section class="lumina-projects" data-lumina-projects aria-label="${escapeHtml(language() === "ar" ? "قائمة المشاريع التفاعلية" : "Interactive projects list")}">
+        <div class="lumina-stage">
+          <div class="lumina-stage-media" aria-hidden="true">
+            ${items.map((item, index) => `<img class="lumina-stage-image${index === 0 ? " active" : ""}" src="${escapeHtml(item.cover)}" alt="" loading="${index === 0 ? "eager" : "lazy"}" data-lumina-image="${index}">`).join("")}
           </div>
-          <div class="project-meta">
-            <div class="project-copy">
-              <h3 class="project-name">${escapeHtml(title)}</h3>
-              <p class="project-summary">${escapeHtml(summary)}</p>
-              ${techMarkup ? `<div class="project-tags">${techMarkup}</div>` : ""}
-            </div>
-            <span class="arrow-dot" aria-hidden="true">↗</span>
+          <div class="lumina-stage-sheen" aria-hidden="true"></div>
+          <div class="lumina-stage-counter" aria-hidden="true"><span data-lumina-current>01</span><i></i><span>${String(items.length).padStart(2, "0")}</span></div>
+          <div class="lumina-stage-copy" aria-live="polite">
+            <div class="eyebrow">${escapeHtml(selectedLabel)}</div>
+            <h3 data-lumina-title>${escapeHtml(first.title)}</h3>
+            <p data-lumina-summary>${escapeHtml(first.summary)}</p>
+            <div class="lumina-stage-tags" data-lumina-tags>${first.technologies.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>
+            <a class="lumina-stage-link" data-lumina-link href="project.html?slug=${encodeURIComponent(first.slug)}">${escapeHtml(openLabel)} <span aria-hidden="true">↗</span></a>
           </div>
-        </a>
-      </article>`;
+
+          <nav class="lumina-navigation" aria-label="${escapeHtml(language() === "ar" ? "اختيار المشروع" : "Choose project")}">
+            ${items.map((item, index) => `
+              <a class="lumina-project-item${index === 0 ? " active" : ""}" href="project.html?slug=${encodeURIComponent(item.slug)}" data-lumina-index="${index}" aria-label="${escapeHtml(item.aria)}">
+                <span class="lumina-progress" aria-hidden="true"><span></span></span>
+                <span class="lumina-item-number">${String(index + 1).padStart(2, "0")}</span>
+                <span class="lumina-item-copy"><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.summary)}</small></span>
+                <span class="lumina-item-arrow" aria-hidden="true">↗</span>
+              </a>`).join("")}
+          </nav>
+        </div>
+      </section>`;
+  }
+
+  function initLumina(root, projects) {
+    const component = root.querySelector("[data-lumina-projects]");
+    if (!component || !projects.length) return;
+
+    const items = [...component.querySelectorAll(".lumina-project-item")];
+    const images = [...component.querySelectorAll(".lumina-stage-image")];
+    const title = component.querySelector("[data-lumina-title]");
+    const summary = component.querySelector("[data-lumina-summary]");
+    const tags = component.querySelector("[data-lumina-tags]");
+    const link = component.querySelector("[data-lumina-link]");
+    const counter = component.querySelector("[data-lumina-current]");
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    let activeIndex = 0;
+    let timer = null;
+
+    const setActive = (nextIndex, userInitiated = false) => {
+      if (!items.length) return;
+      const index = (nextIndex + items.length) % items.length;
+      activeIndex = index;
+      const data = projectData(projects[index], index, projects.length);
+
+      items.forEach((item, i) => item.classList.toggle("active", i === index));
+      images.forEach((image, i) => image.classList.toggle("active", i === index));
+      if (title) title.textContent = data.title;
+      if (summary) summary.textContent = data.summary;
+      if (tags) tags.innerHTML = data.technologies.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join("");
+      if (link) link.href = `project.html?slug=${encodeURIComponent(data.slug)}`;
+      if (counter) counter.textContent = String(index + 1).padStart(2, "0");
+
+      const activeItem = items[index];
+      if (userInitiated) activeItem?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest", inline: "nearest" });
+      restartAuto();
+    };
+
+    const restartAuto = () => {
+      if (timer) window.clearTimeout(timer);
+      items.forEach(item => item.style.removeProperty("--lumina-progress-duration"));
+      if (reducedMotion || document.hidden || items.length < 2) return;
+      const active = items[activeIndex];
+      // Force a fresh progress animation each time the active project changes.
+      active?.style.setProperty("--lumina-progress-duration", "5s");
+      timer = window.setTimeout(() => setActive(activeIndex + 1), 5000);
+    };
+
+    items.forEach((item, index) => {
+      item.addEventListener("pointerenter", () => setActive(index, true));
+      item.addEventListener("focus", () => setActive(index, true));
+    });
+
+    component.addEventListener("pointerenter", () => { if (timer) window.clearTimeout(timer); });
+    component.addEventListener("pointerleave", restartAuto);
+    document.addEventListener("visibilitychange", restartAuto);
+    restartAuto();
   }
 
   async function fetchProjects(force = false) {
@@ -135,13 +207,23 @@
     const allRoot = document.getElementById("all-projects");
     if (!featuredRoot && !allRoot) return;
     const projects = await fetchProjects();
+
+    const mount = (root, list) => {
+      if (!root) return;
+      root.classList.add("lumina-mounted");
+      if (!list.length) {
+        root.innerHTML = `<div class="empty-state">${language() === "ar" ? "لا توجد مشاريع منشورة حاليًا." : "No published projects yet."}</div>`;
+        return;
+      }
+      root.innerHTML = luminaMarkup(list);
+      initLumina(root, list);
+    };
+
     if (featuredRoot) {
       const selected = projects.filter(item => item.featured).slice(0, 4);
-      featuredRoot.innerHTML = (selected.length ? selected : projects.slice(0, 4)).map(cardMarkup).join("");
+      mount(featuredRoot, selected.length ? selected : projects.slice(0, 4));
     }
-    if (allRoot) {
-      allRoot.innerHTML = projects.length ? projects.map(cardMarkup).join("") : `<div class="empty-state">${language() === "ar" ? "لا توجد مشاريع منشورة حاليًا." : "No published projects yet."}</div>`;
-    }
+    if (allRoot) mount(allRoot, projects);
     window.PORTFOLIO_SITE?.observeReveals?.();
   }
 

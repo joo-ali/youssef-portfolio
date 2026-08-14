@@ -7,7 +7,7 @@
   if (reducedMotion || !finePointer) return;
 
   const spotlightSelector = ".project-card-link, .skill-card, .case-card, .contact-details > div";
-  const interactiveSelector = "a, button, input, textarea, select, [role='button'], .project-card, .skill-card, .contact-orbit";
+  const interactiveSelector = "a, button, input, textarea, select, [role='button'], .project-card, .lumina-project-item, .gallery-nav-button, .skill-card, .contact-orbit";
 
   function setupCustomCursor() {
     const dot = document.createElement("div");
