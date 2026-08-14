@@ -53,9 +53,6 @@
       visuals: "الصور",
       gallery: "معرض المشروع",
       galleryText: "تظهر هنا تلقائيًا الصور التي ترفعها من لوحة التحكم الخاصة.",
-      galleryHint: "اسحب أو مرّر للتنقل بين صور التطبيق",
-      previousScreenshot: "الصورة السابقة",
-      nextScreenshot: "الصورة التالية",
       interactive: "تجربة تفاعلية",
       tryApp: "جرّب التطبيق",
       demoConnected: "يمكنك تشغيل وتجربة نسخة الـ Live Demo مباشرة داخل شاشة الهاتف.",
@@ -84,9 +81,6 @@
       visuals: "Visuals",
       gallery: "Project gallery",
       galleryText: "Screenshots uploaded from the private dashboard appear here automatically.",
-      galleryHint: "Drag or scroll to browse the app screens",
-      previousScreenshot: "Previous screenshot",
-      nextScreenshot: "Next screenshot",
       interactive: "Interactive experience",
       tryApp: "Try the application",
       demoConnected: "Run and test the Live Demo directly inside the phone screen.",
@@ -161,14 +155,7 @@
       ${gallery.length ? `<section class="section project-gallery-section">
         <div class="container">
           <div class="section-head"><div><div class="eyebrow">${escapeHtml(copy.visuals)}</div><h2 class="section-title">${escapeHtml(copy.gallery)}</h2></div><p class="section-intro">${escapeHtml(copy.galleryText)}</p></div>
-          <div class="project-gallery-shell" data-project-gallery>
-            <button class="gallery-nav-button gallery-prev" type="button" aria-label="${escapeHtml(copy.previousScreenshot)}" ${gallery.length < 2 ? "hidden" : ""}><span aria-hidden="true">←</span></button>
-            <div class="project-gallery" tabindex="0" role="region" aria-label="${escapeHtml(copy.gallery)}">
-              ${gallery.map((url, index) => `<figure class="project-gallery-slide" data-gallery-slide="${index}"><div class="project-shot-frame"><img src="${escapeHtml(url)}" alt="${escapeHtml(title)} screenshot ${index + 1}" loading="lazy"></div><figcaption><span>${String(index + 1).padStart(2, "0")}</span><span>${escapeHtml(title)}</span></figcaption></figure>`).join("")}
-            </div>
-            <button class="gallery-nav-button gallery-next" type="button" aria-label="${escapeHtml(copy.nextScreenshot)}" ${gallery.length < 2 ? "hidden" : ""}><span aria-hidden="true">→</span></button>
-            <div class="gallery-status"><span>${escapeHtml(copy.galleryHint)}</span><strong><span data-gallery-current>01</span> / ${String(gallery.length).padStart(2, "0")}</strong></div>
-          </div>
+          <div class="project-gallery">${gallery.map((url, index) => `<figure><img src="${escapeHtml(url)}" alt="${escapeHtml(title)} screenshot ${index + 1}" loading="lazy"></figure>`).join("")}</div>
         </div>
       </section>` : ""}
 
@@ -195,52 +182,6 @@
           </div>
         </div>
       </section>`;
-
-    const galleryRoot = root.querySelector("[data-project-gallery]");
-    if (galleryRoot) {
-      const track = galleryRoot.querySelector(".project-gallery");
-      const slides = [...galleryRoot.querySelectorAll("[data-gallery-slide]")];
-      const previous = galleryRoot.querySelector(".gallery-prev");
-      const next = galleryRoot.querySelector(".gallery-next");
-      const current = galleryRoot.querySelector("[data-gallery-current]");
-      const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      let activeIndex = 0;
-      let scrollTimer = null;
-
-      const setIndex = index => {
-        if (!slides.length) return;
-        activeIndex = Math.max(0, Math.min(slides.length - 1, index));
-        if (current) current.textContent = String(activeIndex + 1).padStart(2, "0");
-        previous?.toggleAttribute("disabled", activeIndex === 0);
-        next?.toggleAttribute("disabled", activeIndex === slides.length - 1);
-      };
-
-      const goTo = index => {
-        const targetIndex = Math.max(0, Math.min(slides.length - 1, index));
-        slides[targetIndex]?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest", inline: "center" });
-        setIndex(targetIndex);
-      };
-
-      previous?.addEventListener("click", () => goTo(activeIndex - 1));
-      next?.addEventListener("click", () => goTo(activeIndex + 1));
-      track?.addEventListener("scroll", () => {
-        if (scrollTimer) window.clearTimeout(scrollTimer);
-        scrollTimer = window.setTimeout(() => {
-          if (!track || !slides.length) return;
-          const trackRect = track.getBoundingClientRect();
-          const center = trackRect.left + trackRect.width / 2;
-          let closestIndex = 0;
-          let closestDistance = Infinity;
-          slides.forEach((slide, index) => {
-            const rect = slide.getBoundingClientRect();
-            const distance = Math.abs((rect.left + rect.width / 2) - center);
-            if (distance < closestDistance) { closestDistance = distance; closestIndex = index; }
-          });
-          setIndex(closestIndex);
-        }, 80);
-      }, { passive: true });
-      setIndex(0);
-    }
 
     const launchButton = root.querySelector(".device-launch");
     const demoFrame = root.querySelector(".device-demo-frame");

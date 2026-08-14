@@ -80,7 +80,7 @@
   }
 
   const motionSelector = [
-    ".project-card",
+    ".showcase",
     ".motion-card",
     ".case-card",
     ".project-gallery figure",
@@ -129,8 +129,7 @@
   function attachTilt(element) {
     if (!finePointer || reducedMotion || element.dataset.tiltReady === "true") return;
     element.dataset.tiltReady = "true";
-    const target = element.matches(".project-card") ? element.querySelector(".project-card-link") : element;
-    if (!target) return;
+    const target = element;
 
     const move = event => {
       const rect = element.getBoundingClientRect();
@@ -151,9 +150,9 @@
 
   function registerTilt(scope = document) {
     if (!finePointer || reducedMotion) return;
-    const elements = scope.matches?.(".project-card, .skill-card")
+    const elements = scope.matches?.(".skill-card")
       ? [scope]
-      : Array.from(scope.querySelectorAll?.(".project-card, .skill-card") || []);
+      : Array.from(scope.querySelectorAll?.(".skill-card") || []);
     elements.forEach(attachTilt);
   }
 
