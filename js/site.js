@@ -207,11 +207,16 @@
       <span class="ambient-orb ambient-orb-one"></span>
       <span class="ambient-orb ambient-orb-two"></span>
       <span class="ambient-orb ambient-orb-three"></span>
-      <span class="ambient-path ambient-path-one"><i></i></span>
-      <span class="ambient-path ambient-path-two"><i></i></span>
-      <span class="ambient-path ambient-path-three"><i></i></span>
     `;
     document.body.prepend(layer);
+
+    // Performance: freeze the decorative animation while the tab is hidden
+    // instead of burning GPU/battery on a background nobody can see.
+    if ("visibilityState" in document) {
+      const sync = () => layer.classList.toggle("is-paused", document.hidden);
+      document.addEventListener("visibilitychange", sync);
+      sync();
+    }
   }
 
   function setupControls() {
@@ -256,7 +261,6 @@
       document.body.classList.remove("nav-open");
       button.setAttribute("aria-expanded", "false");
       button.setAttribute("aria-label", t("actions.menuOpen"));
-      button.textContent = "☰";
     };
     button.addEventListener("click", () => {
       const open = !nav.classList.contains("open");
@@ -264,7 +268,6 @@
       document.body.classList.toggle("nav-open", open);
       button.setAttribute("aria-expanded", String(open));
       button.setAttribute("aria-label", t(open ? "actions.menuClose" : "actions.menuOpen"));
-      button.textContent = open ? "×" : "☰";
     });
     nav.querySelectorAll("a").forEach(link => link.addEventListener("click", close));
     document.addEventListener("pointerdown", event => {

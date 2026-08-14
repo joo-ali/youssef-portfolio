@@ -1,6 +1,7 @@
 (() => {
   const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+  const SPLASH_SESSION_KEY = "portfolio-splash-seen";
 
   function finishSplash(splash, immediate = false) {
     if (!splash) {
@@ -22,16 +23,24 @@
     if (!splash) return;
 
     const params = new URLSearchParams(window.location.search);
-    const skipIntro = params.get("intro") === "0";
+    const forceSkip = params.get("intro") === "0";
+    const forceShow = params.get("intro") === "1";
 
-    if (skipIntro) {
+    // V18: the full intro plays once per browser session instead of on
+    // every single load — a returning visitor within the same session
+    // (e.g. going back to the homepage from a project page) no longer
+    // waits through the animation again. ?intro=1 always replays it,
+    // ?intro=0 always skips it.
+    let alreadySeen = false;
+    try { alreadySeen = sessionStorage.getItem(SPLASH_SESSION_KEY) === "1"; } catch (_) {}
+
+    if (forceSkip || (alreadySeen && !forceShow)) {
       finishSplash(splash, true);
       return;
     }
 
-    // V7: show the splash on every full home-page load so it is always visible
-    // during testing and on fresh visits. Reduced-motion users still see a
-    // short static version instead of having it removed completely.
+    try { sessionStorage.setItem(SPLASH_SESSION_KEY, "1"); } catch (_) {}
+
     document.body.classList.add("splash-lock");
 
     let completed = false;
@@ -99,7 +108,6 @@
       ? [scope]
       : Array.from(scope.querySelectorAll?.(motionSelector) || []);
 
-    const grouped = new Map();
     items.forEach(item => {
       if (item.dataset.motionReady === "true") return;
       item.dataset.motionReady = "true";
@@ -109,7 +117,6 @@
       item.style.setProperty("--motion-delay", `${Math.min(index, 7) * 65}ms`);
       if (reducedMotion || !motionObserver) item.classList.add("in-view");
       else motionObserver.observe(item);
-      if (parent) grouped.set(parent, true);
     });
   }
 

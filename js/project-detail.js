@@ -61,7 +61,8 @@
       demoWaitingText: "لم تتم إضافة رابط النسخة التجريبية لهذا المشروع بعد.",
       openNewTab: "فتح النسخة في صفحة جديدة",
       tapToStart: "اضغط لتشغيل التطبيق",
-      loadingDemo: "جارٍ تشغيل التطبيق…"
+      loadingDemo: "جارٍ تشغيل التطبيق…",
+      demoError: "تعذر تحميل التطبيق داخل الإطار. جرّب فتحه في صفحة جديدة."
     } : {
       notFound: "Project not found",
       notFoundText: "The project may be hidden or the link may be incorrect.",
@@ -88,7 +89,8 @@
       demoWaitingText: "A live demo URL has not been added for this project yet.",
       openNewTab: "Open demo in a new tab",
       tapToStart: "Tap to start the application",
-      loadingDemo: "Starting application…"
+      loadingDemo: "Starting application…",
+      demoError: "This demo couldn't load in the frame. Try opening it in a new tab."
     };
   }
 
@@ -169,7 +171,7 @@
             <div class="device-frame">
               <div class="device-speaker"></div>
               ${liveUrl
-                ? `<iframe class="device-demo-frame" data-src="${escapeHtml(liveUrl)}" title="${escapeHtml(title)} live demo" allow="clipboard-read; clipboard-write; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                ? `<iframe class="device-demo-frame" data-src="${escapeHtml(liveUrl)}" title="${escapeHtml(title)} live demo" allow="clipboard-read; clipboard-write; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
                    <button class="device-launch" type="button" aria-label="${escapeHtml(copy.tapToStart)}">
                      <span class="device-launch-icon" aria-hidden="true">▶</span>
                      <strong>${escapeHtml(copy.tapToStart)}</strong>
@@ -190,14 +192,19 @@
         launchButton.classList.add("loading");
         launchButton.querySelector("strong").textContent = copy.loadingDemo;
         demoFrame.src = source;
-        demoFrame.addEventListener("load", () => {
+
+        let settled = false;
+        const finish = () => {
+          if (settled) return;
+          settled = true;
           launchButton.classList.add("hidden");
           demoFrame.classList.add("active");
-        }, { once: true });
-        window.setTimeout(() => {
-          launchButton.classList.add("hidden");
-          demoFrame.classList.add("active");
-        }, 7000);
+        };
+        demoFrame.addEventListener("load", finish, { once: true });
+        // Fallback: some cross-origin demos never fire a reliable load signal.
+        // Reveal the frame anyway after a short wait rather than leaving the
+        // launcher stuck in a loading state indefinitely.
+        window.setTimeout(finish, 7000);
       });
     }
   }
