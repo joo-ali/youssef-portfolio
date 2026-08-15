@@ -98,8 +98,6 @@
     const slug = getProjectSlug(project);
     const cover = getCover(project);
     const aria = language() === "ar" ? `عرض تفاصيل مشروع ${title}` : `View ${title} project details`;
-    const dotCount = Math.min(Math.max(Array.isArray(project.gallery_urls) ? project.gallery_urls.length : 0, technologies.length, 1), 4);
-    const dots = Array.from({ length: dotCount }).map((_, i) => `<span class="${i === 0 ? "active" : ""}"></span>`).join("");
 
     return `
       <article class="project-card reveal">
@@ -116,7 +114,6 @@
             </div>
             <div class="project-card-footer">
               <span class="project-card-tag">${escapeHtml(tag)}</span>
-              <div class="project-card-dots" aria-hidden="true">${dots}</div>
             </div>
           </div>
         </a>

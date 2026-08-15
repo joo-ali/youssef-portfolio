@@ -150,9 +150,9 @@
 
   function registerTilt(scope = document) {
     if (!finePointer || reducedMotion) return;
-    const elements = scope.matches?.(".project-card-link, .skill-card")
+    const elements = scope.matches?.(".project-card-link")
       ? [scope]
-      : Array.from(scope.querySelectorAll?.(".project-card-link, .skill-card") || []);
+      : Array.from(scope.querySelectorAll?.(".project-card-link") || []);
     elements.forEach(attachTilt);
   }
 

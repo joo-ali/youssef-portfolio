@@ -6,9 +6,8 @@
   // asked the system for reduced motion — these are all decorative.
   if (reducedMotion || !finePointer) return;
 
-  // v2: scoped down to the two places a spotlight actually helps
-  // (browsing the project cards and the skills grid), not every tile.
-  const spotlightSelector = ".project-card-link, .skill-card";
+  // Spotlight glow follows the pointer across project cards.
+  const spotlightSelector = ".project-card-link";
 
   function setupClickRipple() {
     window.addEventListener("pointerdown", event => {
