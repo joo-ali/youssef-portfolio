@@ -22,7 +22,7 @@
   </script>
   <title>Youssef Ali Kamal — Flutter Developer</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css?v=19">
+  <link rel="stylesheet" href="css/styles.css?v=20">
 </head>
 <body class="has-splash" data-page="home" id="top">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -56,6 +56,7 @@
             <a class="active" href="index.html" data-i18n="nav.home">Home</a>
             <a href="projects.html" data-i18n="nav.projects">Projects</a>
             <a href="skills.html" data-i18n="nav.skills">Skills</a>
+            <a href="resume.html" data-i18n="nav.resume">Resume</a>
             <a href="#contact" data-i18n="nav.contact">Contact</a>
           </nav>
           <div class="utility-controls">
@@ -85,10 +86,24 @@
 
       <section class="section white" id="about">
         <div class="container about-grid">
-          <h2 class="about-lead reveal" data-i18n="home.aboutLead">I turn ideas into responsive mobile experiences that feel clear, useful, and polished.</h2>
+          <div class="about-media reveal">
+            <img class="about-photo" src="assets/profile.png" alt="Portrait of Youssef Ali Kamal">
+          </div>
           <div class="about-side reveal">
+            <a class="availability-badge" href="#contact"><span class="availability-dot" aria-hidden="true"></span><span data-i18n="badge.available">Available for opportunities</span></a>
+            <div class="eyebrow" data-i18n="about.eyebrow">Know who I am</div>
+            <h2 class="about-lead" data-i18n="home.aboutLead">I turn ideas into responsive mobile experiences that feel clear, useful, and polished.</h2>
             <p data-i18n="home.aboutP1">I am a Computer Science graduate and Flutter developer with hands-on experience in Flutter, Dart, Firebase Authentication, Cloud Firestore, REST APIs, Dio, Retrofit, Bloc/Cubit, Hive, and Git/GitHub.</p>
             <p data-i18n="home.aboutP2">I enjoy solving technical problems, connecting applications to real backends, and continuously improving architecture and user experience.</p>
+            <ul class="about-interests">
+              <li data-i18n="about.interest1">Exploring new Flutter packages and tools</li>
+              <li data-i18n="about.interest2">Writing about what I learn while building</li>
+              <li data-i18n="about.interest3">Contributing to and reading open-source code</li>
+            </ul>
+            <blockquote class="about-quote">
+              <p data-i18n="about.quote">Strive to build things that make a difference.</p>
+              <cite data-i18n="about.quoteAuthor">— Youssef Ali Kamal</cite>
+            </blockquote>
             <div class="about-actions">
               <a class="round-link" href="skills.html"><span data-i18n="home.moreSkills">More about my skills</span><i aria-hidden="true">↗</i></a>
               <a class="cv-download" href="assets/Youssef_Ali_Kamal_CV.pdf" download="Youssef_Ali_Kamal_CV.pdf" data-cv-link>
@@ -96,6 +111,30 @@
                 <span data-i18n="home.downloadCV">Download CV</span>
               </a>
             </div>
+          </div>
+        </div>
+
+        <div class="container about-skillset">
+          <div class="eyebrow" data-i18n="about.skillsetEyebrow">Professional skillset</div>
+          <h3 data-i18n="about.skillsetTitle">Technologies I work with</h3>
+          <div class="chip-row">
+            <span class="chip">Flutter</span>
+            <span class="chip">Dart</span>
+            <span class="chip">Firebase Auth</span>
+            <span class="chip">Cloud Firestore</span>
+            <span class="chip">REST APIs</span>
+            <span class="chip">Dio</span>
+            <span class="chip">Retrofit</span>
+            <span class="chip">Bloc / Cubit</span>
+            <span class="chip">Hive</span>
+            <span class="chip">Git &amp; GitHub</span>
+          </div>
+          <h3 data-i18n="about.toolsTitle">Tools I use</h3>
+          <div class="chip-row">
+            <span class="chip">VS Code</span>
+            <span class="chip">Android Studio</span>
+            <span class="chip">Postman</span>
+            <span class="chip">Figma</span>
           </div>
         </div>
       </section>
@@ -109,7 +148,7 @@
             </div>
             <p class="section-intro" data-i18n="home.worksIntro">A selection of projects that reflect my experience with mobile development, backend integration, authentication, storage, and scalable application flows.</p>
           </div>
-          <div class="projects-mount" id="featured-projects">
+          <div class="projects-grid" id="featured-projects">
             <div class="loading-state" data-i18n="projects.loading">Loading projects…</div>
           </div>
           <div class="center-action"><a class="pill-btn" href="projects.html"><span data-i18n="home.exploreProjects">Explore all projects</span> <span aria-hidden="true">→</span></a></div>
@@ -149,6 +188,7 @@
               <a href="index.html" data-i18n="footer.home">Home</a>
               <a href="projects.html" data-i18n="footer.projects">Projects</a>
               <a href="skills.html" data-i18n="footer.skills">Skills</a>
+              <a href="resume.html" data-i18n="footer.resume">Resume</a>
             </nav>
           </div>
           <div class="footer-contact-col">
@@ -172,9 +212,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
-  <script src="js/site.js?v=18"></script>
+  <script src="js/site.js?v=20"></script>
   <script src="js/animations.js?v=8"></script>
-  <script src="js/interactions.js?v=1"></script>
+  <script src="js/interactions.js?v=2"></script>
   <script src="js/public.js"></script>
 </body>
 </html>

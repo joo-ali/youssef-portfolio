@@ -6,53 +6,9 @@
   // asked the system for reduced motion — these are all decorative.
   if (reducedMotion || !finePointer) return;
 
-  const spotlightSelector = ".showcase-nav-item, .skill-card, .case-card, .contact-details > div";
-  const interactiveSelector = "a, button, input, textarea, select, [role='button'], .showcase-nav-item, .skill-card, .contact-orbit";
-
-  function setupCustomCursor() {
-    const dot = document.createElement("div");
-    dot.className = "cursor-dot";
-    const ring = document.createElement("div");
-    ring.className = "cursor-ring";
-    document.body.append(dot, ring);
-    document.documentElement.classList.add("has-custom-cursor", "cursor-hidden");
-
-    let targetX = window.innerWidth / 2;
-    let targetY = window.innerHeight / 2;
-    let ringX = targetX;
-    let ringY = targetY;
-    let raf = null;
-
-    function loop() {
-      // Ease the ring toward the pointer for a soft trailing feel; the
-      // dot itself tracks the pointer exactly for precision.
-      ringX += (targetX - ringX) * 0.2;
-      ringY += (targetY - ringY) * 0.2;
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
-      raf = requestAnimationFrame(loop);
-    }
-    raf = requestAnimationFrame(loop);
-
-    window.addEventListener("pointermove", event => {
-      targetX = event.clientX;
-      targetY = event.clientY;
-      dot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
-      document.documentElement.classList.remove("cursor-hidden");
-    }, { passive: true });
-
-    document.addEventListener("pointerover", event => {
-      const target = event.target instanceof Element ? event.target.closest(interactiveSelector) : null;
-      document.documentElement.classList.toggle("cursor-hover", Boolean(target));
-    });
-
-    window.addEventListener("pointerdown", () => document.documentElement.classList.add("cursor-down"));
-    window.addEventListener("pointerup", () => document.documentElement.classList.remove("cursor-down"));
-    document.addEventListener("mouseleave", () => document.documentElement.classList.add("cursor-hidden"));
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && raf) { cancelAnimationFrame(raf); raf = null; }
-      else if (!raf) { raf = requestAnimationFrame(loop); }
-    });
-  }
+  // v2: scoped down to the two places a spotlight actually helps
+  // (browsing the project cards and the skills grid), not every tile.
+  const spotlightSelector = ".project-card-link, .skill-card";
 
   function setupClickRipple() {
     window.addEventListener("pointerdown", event => {
@@ -79,29 +35,6 @@
     }, { passive: true });
   }
 
-  function setupAmbientParallax() {
-    const layer = document.querySelector(".ambient-background");
-    if (!layer) return;
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-
-    window.addEventListener("pointermove", event => {
-      targetX = (event.clientX / window.innerWidth - 0.5) * 22;
-      targetY = (event.clientY / window.innerHeight - 0.5) * 14;
-    }, { passive: true });
-
-    function loop() {
-      currentX += (targetX - currentX) * 0.05;
-      currentY += (targetY - currentY) * 0.05;
-      layer.style.setProperty("--parallax-x", `${currentX.toFixed(2)}px`);
-      layer.style.setProperty("--parallax-y", `${currentY.toFixed(2)}px`);
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-  }
-
   function setupGalleryWheelScroll() {
     document.addEventListener("wheel", event => {
       const gallery = event.target instanceof Element ? event.target.closest(".project-gallery") : null;
@@ -119,10 +52,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    setupCustomCursor();
     setupClickRipple();
     setupSpotlight();
-    setupAmbientParallax();
     setupGalleryWheelScroll();
   });
 })();

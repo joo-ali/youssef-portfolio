@@ -80,7 +80,7 @@
   }
 
   const motionSelector = [
-    ".showcase",
+    ".project-card",
     ".motion-card",
     ".case-card",
     ".project-gallery figure",
@@ -150,9 +150,9 @@
 
   function registerTilt(scope = document) {
     if (!finePointer || reducedMotion) return;
-    const elements = scope.matches?.(".skill-card")
+    const elements = scope.matches?.(".project-card-link, .skill-card")
       ? [scope]
-      : Array.from(scope.querySelectorAll?.(".skill-card") || []);
+      : Array.from(scope.querySelectorAll?.(".project-card-link, .skill-card") || []);
     elements.forEach(attachTilt);
   }
 

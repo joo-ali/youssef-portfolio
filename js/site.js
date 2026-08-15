@@ -4,7 +4,25 @@
       "nav.home": "Home",
       "nav.projects": "Projects",
       "nav.skills": "Skills",
+      "nav.resume": "Resume",
       "nav.contact": "Contact",
+      "badge.available": "Available for opportunities",
+      "about.eyebrow": "Know who I am",
+      "about.interest1": "Exploring new Flutter packages and tools",
+      "about.interest2": "Writing about what I learn while building",
+      "about.interest3": "Contributing to and reading open-source code",
+      "about.quote": "Strive to build things that make a difference.",
+      "about.quoteAuthor": "— Youssef Ali Kamal",
+      "about.skillsetEyebrow": "Professional skillset",
+      "about.skillsetTitle": "Technologies I work with",
+      "about.toolsTitle": "Tools I use",
+      "resume.eyebrow": "Curriculum vitae",
+      "resume.title": "My resume",
+      "resume.intro": "A quick look at my experience, education, and skills — or download the full PDF.",
+      "resume.download": "Download CV",
+      "resume.downloadBottom": "Download CV",
+      "resume.openTab": "Open in new tab",
+      "resume.fallback": "Your browser can't preview PDFs inline.",
       "actions.themeDark": "Switch to dark theme",
       "actions.themeLight": "Switch to light theme",
       "actions.language": "Switch language",
@@ -58,6 +76,7 @@
       "footer.home": "Home",
       "footer.projects": "Projects",
       "footer.skills": "Skills",
+      "footer.resume": "Resume",
       "footer.backTop": "Back to top",
       "footer.rights": "All rights reserved.",
       "footer.downloadCV": "Download CV ↓",
@@ -68,7 +87,25 @@
       "nav.home": "الرئيسية",
       "nav.projects": "المشاريع",
       "nav.skills": "المهارات",
+      "nav.resume": "السيرة الذاتية",
       "nav.contact": "تواصل",
+      "badge.available": "متاح لفرص العمل والتعاون",
+      "about.eyebrow": "تعرّف عليّ",
+      "about.interest1": "استكشاف حزم وأدوات Flutter الجديدة",
+      "about.interest2": "الكتابة عمّا أتعلمه أثناء البناء",
+      "about.interest3": "المساهمة في المشاريع مفتوحة المصدر وقراءة أكوادها",
+      "about.quote": "اسعَ لبناء أشياء تُحدث فرقًا حقيقيًا.",
+      "about.quoteAuthor": "— يوسف علي كمال",
+      "about.skillsetEyebrow": "المهارات المهنية",
+      "about.skillsetTitle": "التقنيات التي أعمل بها",
+      "about.toolsTitle": "الأدوات التي أستخدمها",
+      "resume.eyebrow": "السيرة الذاتية",
+      "resume.title": "سيرتي الذاتية",
+      "resume.intro": "نظرة سريعة على خبرتي وتعليمي ومهاراتي — أو نزّل ملف PDF كاملاً.",
+      "resume.download": "تنزيل السيرة الذاتية",
+      "resume.downloadBottom": "تنزيل السيرة الذاتية",
+      "resume.openTab": "فتح في صفحة جديدة",
+      "resume.fallback": "متصفحك لا يدعم معاينة ملفات PDF داخل الصفحة.",
       "actions.themeDark": "التبديل إلى الوضع الداكن",
       "actions.themeLight": "التبديل إلى الوضع الفاتح",
       "actions.language": "تغيير اللغة",
@@ -122,6 +159,7 @@
       "footer.home": "الرئيسية",
       "footer.projects": "المشاريع",
       "footer.skills": "المهارات",
+      "footer.resume": "السيرة الذاتية",
       "footer.backTop": "العودة للأعلى",
       "footer.rights": "جميع الحقوق محفوظة.",
       "footer.downloadCV": "تنزيل السيرة الذاتية ↓",
@@ -134,7 +172,8 @@
     home: { en: "Youssef Ali Kamal — Flutter Developer", ar: "يوسف علي كمال — مطور Flutter" },
     projects: { en: "Projects — Youssef Ali Kamal", ar: "المشاريع — يوسف علي كمال" },
     skills: { en: "Skills — Youssef Ali Kamal", ar: "المهارات — يوسف علي كمال" },
-    project: { en: "Project — Youssef Ali Kamal", ar: "مشروع — يوسف علي كمال" }
+    project: { en: "Project — Youssef Ali Kamal", ar: "مشروع — يوسف علي كمال" },
+    resume: { en: "Resume — Youssef Ali Kamal", ar: "السيرة الذاتية — يوسف علي كمال" }
   };
 
   function getLanguage() {
@@ -231,9 +270,11 @@
 
   async function setupCvLinks() {
     const links = [...document.querySelectorAll("[data-cv-link]")];
-    if (!links.length) return;
+    const embed = document.querySelector("[data-cv-embed]");
+    if (!links.length && !embed) return;
     const fallback = "assets/Youssef_Ali_Kamal_CV.pdf";
     links.forEach(link => { if (!link.getAttribute("href")) link.href = fallback; });
+    if (embed && !embed.getAttribute("src")) embed.src = fallback;
     const cfg = window.PORTFOLIO_CONFIG || {};
     if (!window.supabase || !cfg.supabaseUrl || !cfg.supabaseAnonKey || cfg.supabaseUrl.startsWith("YOUR_")) return;
     try {
@@ -245,8 +286,9 @@
       if (!response.ok) return;
       links.forEach(link => {
         link.href = remoteUrl;
-        link.setAttribute("download", "Youssef_Ali_Kamal_CV.pdf");
+        if (link.hasAttribute("download")) link.setAttribute("download", "Youssef_Ali_Kamal_CV.pdf");
       });
+      if (embed) embed.src = remoteUrl;
     } catch (_) {
       // Keep the bundled CV as a reliable fallback.
     }

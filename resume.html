@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Selected Flutter and mobile development projects by Youssef Ali Kamal.">
+  <meta name="description" content="Resume and downloadable CV for Youssef Ali Kamal, Flutter developer.">
   <meta name="theme-color" content="#f4f5f7">
   <script>
     (() => {
@@ -20,11 +20,11 @@
       document.documentElement.classList.add("js");
     })();
   </script>
-  <title>Projects — Youssef Ali Kamal</title>
+  <title>Resume — Youssef Ali Kamal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css?v=20">
 </head>
-<body data-page="projects" id="top">
+<body data-page="resume" id="top">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"><span></span></div>
   <header class="topbar">
@@ -32,9 +32,9 @@
       <div class="header-right">
         <nav class="nav" aria-label="Primary navigation">
           <a href="index.html" data-i18n="nav.home">Home</a>
-          <a class="active" href="projects.html" data-i18n="nav.projects">Projects</a>
+          <a href="projects.html" data-i18n="nav.projects">Projects</a>
           <a href="skills.html" data-i18n="nav.skills">Skills</a>
-          <a href="resume.html" data-i18n="nav.resume">Resume</a>
+          <a class="active" href="resume.html" data-i18n="nav.resume">Resume</a>
           <a href="#contact" data-i18n="nav.contact">Contact</a>
         </nav>
         <div class="utility-controls">
@@ -49,16 +49,34 @@
   <main id="main-content">
     <section class="page-hero">
       <div class="container page-enter-group">
-        <a class="availability-badge" href="#contact"><span class="availability-dot" aria-hidden="true"></span><span data-i18n="badge.available">Available for opportunities</span></a>
-        <div class="eyebrow" data-i18n="projects.eyebrow">Projects archive</div>
-        <h1 data-i18n="projects.title">Useful products and thoughtful mobile experiences</h1>
-        <p class="section-intro" data-i18n="projects.intro">Mobile applications and systems shaped by real requirements, technical challenges, and a strong focus on usability.</p>
+        <div class="eyebrow" data-i18n="resume.eyebrow">Curriculum vitae</div>
+        <h1 data-i18n="resume.title">My resume</h1>
+        <p class="section-intro" data-i18n="resume.intro">A quick look at my experience, education, and skills — or download the full PDF.</p>
       </div>
     </section>
 
     <section class="section white" style="padding-top:30px">
-      <div class="container">
-        <div class="projects-grid" id="all-projects"><div class="loading-state" data-i18n="projects.loading">Loading projects…</div></div>
+      <div class="container resume-panel">
+        <div class="resume-actions">
+          <a class="cv-download" href="assets/Youssef_Ali_Kamal_CV.pdf" download="Youssef_Ali_Kamal_CV.pdf" data-cv-link>
+            <span class="cv-download-icon" aria-hidden="true">↓</span>
+            <span data-i18n="resume.download">Download CV</span>
+          </a>
+          <a class="pill-btn" href="assets/Youssef_Ali_Kamal_CV.pdf" target="_blank" rel="noreferrer" data-cv-link data-i18n="resume.openTab">Open in new tab</a>
+        </div>
+
+        <div class="resume-frame">
+          <iframe data-cv-embed src="assets/Youssef_Ali_Kamal_CV.pdf" title="Youssef Ali Kamal — Resume PDF" loading="lazy">
+            <p data-i18n="resume.fallback">Your browser can't preview PDFs inline.</p>
+          </iframe>
+        </div>
+
+        <div class="resume-actions resume-actions-bottom">
+          <a class="cv-download" href="assets/Youssef_Ali_Kamal_CV.pdf" download="Youssef_Ali_Kamal_CV.pdf" data-cv-link>
+            <span class="cv-download-icon" aria-hidden="true">↓</span>
+            <span data-i18n="resume.downloadBottom">Download CV</span>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -95,6 +113,5 @@
   <script src="js/site.js?v=20"></script>
   <script src="js/animations.js?v=8"></script>
   <script src="js/interactions.js?v=2"></script>
-  <script src="js/public.js"></script>
 </body>
 </html>
