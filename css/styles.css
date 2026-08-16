@@ -133,10 +133,10 @@ body {
   font-size: clamp(16px, 1.05vw, 18px);
   line-height: 1.65;
   text-rendering: optimizeLegibility;
+  padding-bottom: calc(86px + env(safe-area-inset-bottom));
   transition: background-color .25s ease, color .25s ease;
 }
 html[dir="rtl"] body { --font-body: "IBM Plex Sans Arabic", Inter, sans-serif; --font-display: "IBM Plex Sans Arabic", "Space Grotesk", sans-serif; line-height: 1.78; }
-body.nav-open { overflow: hidden; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea { font: inherit; }
 button { color: inherit; }
@@ -262,9 +262,12 @@ html[data-theme="light"] .ambient-orb { mix-blend-mode: multiply; opacity: .15; 
 
 /* ==========================================================================
    3. NAVIGATION
-   One implementation only (previous versions layered three competing
-   mobile-nav rule sets with !important overrides — consolidated here).
-   Touch targets are >=44px at every breakpoint.
+   The topbar now only holds utility controls (theme/language). Primary
+   navigation is the floating Tubelight-style dock below, self-contained
+   and independent of the topbar — adapted from the "Tubelight Navbar"
+   pattern (glass pill, glowing active indicator) to plain CSS/JS, used
+   as the single default nav across every breakpoint instead of a
+   separate mobile drawer.
    ========================================================================== */
 .topbar {
   position: sticky;
@@ -298,27 +301,8 @@ html[data-theme="light"] .ambient-orb { mix-blend-mode: multiply; opacity: .15; 
 }
 .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-inline-start: auto; width: 100%; }
 
-.nav { display: flex; align-items: center; gap: 7px; }
-.nav a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 500;
-  opacity: .9;
-  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
-}
-.nav a .nav-icon { display: none; }
-.nav a:hover { transform: translateY(-1px); opacity: 1; }
-.nav a.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); opacity: 1; }
-.topbar.overlay .nav a.active { background: #fff; border-color: #fff; color: #07152d; }
-
 .utility-controls { display: flex; align-items: center; gap: 7px; }
-.utility-button, .menu-toggle {
+.utility-button {
   width: 44px;
   height: 44px;
   display: inline-grid;
@@ -333,93 +317,91 @@ html[data-theme="light"] .ambient-orb { mix-blend-mode: multiply; opacity: .15; 
 }
 .language-toggle { font-size: 11px; letter-spacing: .04em; }
 .theme-toggle { font-size: 18px; }
-.utility-button:hover, .menu-toggle:hover { transform: translateY(-1px); background: var(--ink); color: var(--surface); }
-.topbar.overlay .utility-button:hover, .topbar.overlay .menu-toggle:hover { background: #fff; color: #07152d; }
-.menu-toggle { display: none; font-size: 0; position: relative; }
-.menu-toggle::before { content: "☰"; font-size: 19px; line-height: 1; }
-.menu-toggle[aria-expanded="true"]::before { content: "×"; font-size: 25px; font-weight: 400; }
+.utility-button:hover { transform: translateY(-1px); background: var(--ink); color: var(--surface); }
+.topbar.overlay .utility-button:hover { background: #fff; color: #07152d; }
 
-/* Tablet: nav stays inline, no drawer needed at this width */
-@media (min-width: 761px) and (max-width: 980px) {
-  .nav a { padding: 9px 13px; font-size: 13px; }
+/* Floating pill dock, fixed at the bottom-center on every breakpoint.
+   Icons show on narrow viewports, text labels take over from ~640px —
+   matching the reference's "icons for mobile, text for desktop" split. */
+.tubelight-nav {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 200;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--panel-border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-bg-strong) 90%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 18px 50px rgba(8, 14, 28, .22);
+}
+html[data-theme="dark"] .tubelight-nav { box-shadow: 0 18px 50px rgba(0, 4, 14, .5); }
+
+.tubelight-item {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color var(--dur-base) ease;
+}
+.tubelight-item:hover, .tubelight-item:focus-visible { color: var(--ink); }
+.tubelight-item.active { color: var(--ink); }
+.tubelight-icon { display: inline-flex; flex: 0 0 auto; width: 19px; height: 19px; }
+.tubelight-label { display: none; }
+
+/* Shared sliding highlight — repositioned via JS (js/site.js) to sit
+   behind whichever item is active/hovered, with a small glowing bar
+   above it (the "tube light"). */
+.tubelight-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -1;
+  border-radius: 999px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border-strong);
+  box-shadow: var(--shadow-sm);
+  transition: transform .38s var(--ease-out), width .38s var(--ease-out);
+  will-change: transform, width;
+}
+.tubelight-indicator::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 26px;
+  height: 3px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px 2px var(--accent), 0 0 20px 6px color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
-/* Mobile: single drawer implementation */
-@media (max-width: 760px) {
-  .menu-toggle { display: inline-grid; }
-
-  body.nav-open { overflow: hidden; }
-  body.nav-open::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 54;
-    background: rgba(1, 8, 20, .5);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    animation: navBackdropIn .2s ease both;
-  }
-  body.nav-open .topbar { z-index: 70; }
-  body.nav-open .menu-toggle { position: relative; z-index: 73; }
-
-  /* Full-height sheet sliding in from the inline-start edge (left in LTR,
-     right in RTL) with a vertical, icon-led list — mirrors the pattern of
-     a mobile nav drawer/sheet rather than a small floating dropdown. */
-  .nav {
-    --nav-offscreen: -100%;
-    position: fixed;
-    inset-block: 0;
-    inset-inline-start: 0;
-    z-index: 72;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: min(300px, 84vw);
-    padding: max(84px, calc(env(safe-area-inset-top) + 78px)) 14px 24px;
-    border: 0;
-    border-inline-end: 1px solid rgba(255,255,255,.14);
-    border-radius: 0;
-    background: linear-gradient(165deg, rgba(10, 31, 65, .98), rgba(4, 16, 37, .99));
-    color: #fff;
-    box-shadow: 0 0 70px rgba(0, 5, 20, .5);
-    transform: translateX(var(--nav-offscreen));
-    transition: transform .32s var(--ease-out);
-  }
-  html[dir="rtl"] .nav {
-    --nav-offscreen: 100%;
-    inset-inline-start: auto;
-    inset-inline-end: 0;
-    border-inline-end: 0;
-    border-inline-start: 1px solid rgba(255,255,255,.14);
-  }
-  .nav.open { transform: translateX(0); }
-
-  .nav a {
-    width: 100%;
-    min-height: 50px;
-    justify-content: flex-start;
-    gap: 14px;
-    padding: 12px 14px;
-    border: 0;
-    border-radius: 14px;
-    color: rgba(255,255,255,.84);
-    font-size: 15px;
-    font-weight: 600;
-    opacity: 1;
-    transform: none;
-  }
-  .nav a .nav-icon { display: inline-flex; flex: 0 0 auto; width: 20px; height: 20px; }
-  .nav a:hover { background: rgba(255,255,255,.08); color: #fff; transform: none; }
-  .nav a.active, .topbar.overlay .nav a.active {
-    background: rgba(120,144,255,.2);
-    border-color: transparent;
-    color: #fff;
-    box-shadow: inset 3px 0 0 var(--blue-300);
-  }
-  html[dir="rtl"] .nav a.active { box-shadow: inset -3px 0 0 var(--blue-300); }
+@media (min-width: 640px) {
+  .tubelight-icon { display: none; }
+  .tubelight-label { display: inline; }
+  .tubelight-item { padding: 10px 20px; }
 }
 
-@keyframes navBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .tubelight-indicator { transition: none; }
+}
+
 
 /* ==========================================================================
    4. HERO
@@ -1227,7 +1209,7 @@ html[dir="rtl"] .scroll-progress span { transform-origin: right center; }
   .brand { max-width: 128px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .hero-title { font-size: clamp(42px, 12.4vw, 50px); }
   .hero-name { font-size: 19px; }
-  .nav { width: min(260px, calc(100vw - 20px)); }
+  .tubelight-nav { max-width: calc(100vw - 20px); }
 }
 
 @media (max-width: 340px) {

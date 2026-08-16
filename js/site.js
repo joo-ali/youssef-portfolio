@@ -25,8 +25,6 @@
       "actions.themeDark": "Switch to dark theme",
       "actions.themeLight": "Switch to light theme",
       "actions.language": "Switch language",
-      "actions.menuOpen": "Open navigation",
-      "actions.menuClose": "Close navigation",
       "home.heroCopy": "Flutter developer focused on responsive, user-friendly mobile applications and dependable product experiences.",
       "home.heroKicker": "Creative mobile developer",
       "home.heroTitle": "Flutter Developer",
@@ -87,8 +85,6 @@
       "actions.themeDark": "التبديل إلى الوضع الداكن",
       "actions.themeLight": "التبديل إلى الوضع الفاتح",
       "actions.language": "تغيير اللغة",
-      "actions.menuOpen": "فتح القائمة",
-      "actions.menuClose": "إغلاق القائمة",
       "home.heroCopy": "مطور Flutter أركز على بناء تطبيقات موبايل متجاوبة وسهلة الاستخدام وتجارب رقمية موثوقة.",
       "home.heroKicker": "مطور تطبيقات موبايل",
       "home.heroTitle": "مطور Flutter",
@@ -251,31 +247,71 @@
     }
   }
 
-  function setupMenu() {
-    const button = document.querySelector(".menu-toggle");
-    const nav = document.querySelector(".nav");
-    if (!button || !nav) return;
-    const close = () => {
-      nav.classList.remove("open");
-      document.body.classList.remove("nav-open");
-      button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-label", t("actions.menuOpen"));
-    };
-    button.addEventListener("click", () => {
-      const open = !nav.classList.contains("open");
-      nav.classList.toggle("open", open);
-      document.body.classList.toggle("nav-open", open);
-      button.setAttribute("aria-expanded", String(open));
-      button.setAttribute("aria-label", t(open ? "actions.menuClose" : "actions.menuOpen"));
+  const NAV_ICONS = {
+    home: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 9.5 10 3l7 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 8.5V16a1 1 0 0 0 1 1h3v-4.5h2V17h3a1 1 0 0 0 1-1V8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    projects: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="6.5" width="14" height="9" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 6.5V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 12.5 5v1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3 11h14" stroke="currentColor" stroke-width="1.6"/></svg>',
+    resume: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 2.5h5.5L15 6v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11.3 2.5V6H15" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.5h6M7 13.5h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    contact: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4.5" width="15" height="11" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="m3.5 5.5 6.5 5.5 6.5-5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+
+  // Floating pill dock adapted from the "Tubelight Navbar" pattern: a
+  // glass pill container with a shared highlight that slides between
+  // items and glows above whichever one is active/hovered. Built once
+  // in JS (rather than duplicated per page) so language updates and
+  // active-state detection stay in one place. Used as the single
+  // default nav at every breakpoint — no separate mobile drawer.
+  function setupTubelightNav() {
+    if (document.querySelector(".tubelight-nav")) return;
+    const page = document.body?.dataset.page || "home";
+    const items = [
+      { key: "home", href: "index.html", i18n: "nav.home", active: page === "home" },
+      { key: "projects", href: "projects.html", i18n: "nav.projects", active: page === "projects" || page === "project" },
+      { key: "resume", href: "resume.html", i18n: "nav.resume", active: page === "resume" },
+      { key: "contact", href: "#contact", i18n: "nav.contact", active: false }
+    ];
+
+    const nav = document.createElement("nav");
+    nav.className = "tubelight-nav";
+    nav.setAttribute("aria-label", "Primary navigation");
+    nav.innerHTML = `<span class="tubelight-indicator" aria-hidden="true"></span>` + items.map(item => `
+      <a class="tubelight-item${item.active ? " active" : ""}" href="${item.href}" data-key="${item.key}"${item.active ? ' aria-current="page"' : ""}>
+        <span class="tubelight-icon">${NAV_ICONS[item.key]}</span>
+        <span class="tubelight-label" data-i18n="${item.i18n}">${t(item.i18n)}</span>
+      </a>`).join("");
+    document.body.appendChild(nav);
+
+    const indicator = nav.querySelector(".tubelight-indicator");
+    const links = [...nav.querySelectorAll(".tubelight-item")];
+    const activeLink = links.find(link => link.classList.contains("active")) || links[0];
+
+    function moveIndicator(target, animate) {
+      if (!target) return;
+      const navRect = nav.getBoundingClientRect();
+      const itemRect = target.getBoundingClientRect();
+      if (!animate) indicator.style.transition = "none";
+      indicator.style.width = `${itemRect.width}px`;
+      indicator.style.transform = `translateX(${itemRect.left - navRect.left}px)`;
+      if (!animate) {
+        // Force layout so the "no transition" style actually applies
+        // before we hand control back to the stylesheet's transition.
+        void indicator.offsetWidth;
+        indicator.style.transition = "";
+      }
+    }
+
+    links.forEach(link => {
+      link.addEventListener("mouseenter", () => moveIndicator(link, true));
+      link.addEventListener("focus", () => moveIndicator(link, true));
     });
-    nav.querySelectorAll("a").forEach(link => link.addEventListener("click", close));
-    document.addEventListener("pointerdown", event => {
-      if (!nav.classList.contains("open")) return;
-      if (nav.contains(event.target) || button.contains(event.target)) return;
-      close();
-    });
-    document.addEventListener("keydown", event => { if (event.key === "Escape") close(); });
-    window.addEventListener("resize", () => { if (window.innerWidth > 760) close(); });
+    nav.addEventListener("mouseleave", () => moveIndicator(activeLink, true));
+
+    const resnap = () => moveIndicator(nav.querySelector(".tubelight-item.active") || links[0], false);
+    window.addEventListener("resize", resnap);
+    window.addEventListener("portfolio:languagechange", () => requestAnimationFrame(resnap));
+
+    // Wait a frame for layout/fonts before the first measurement so the
+    // indicator doesn't snap visibly into place after paint.
+    requestAnimationFrame(() => moveIndicator(activeLink, false));
   }
 
   function observeReveals() {
@@ -322,7 +358,7 @@
     setTheme(preferredTheme());
     setupAmbientBackground();
     setupControls();
-    setupMenu();
+    setupTubelightNav();
   setupCvLinks();
     setupHeroMotion();
     observeReveals();
