@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Manage Projects — Portfolio Dashboard</title>
+  <title>Portfolio Dashboard — Youssef Ali Kamal</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/admin.css?v=17">
+  <link rel="stylesheet" href="../css/admin-content.css?v=21">
 </head>
 <body>
   <div class="admin-shell">
@@ -17,7 +18,7 @@
 
     <main class="admin-main">
       <div class="admin-heading">
-        <div><h1>Manage projects</h1><p>Add, edit, publish, hide, reorder, and delete portfolio projects.</p></div>
+        <div><h1>Portfolio dashboard</h1><p>Manage projects, CV, About content, skills, and tools from one place.</p></div>
         <button id="new-project-button" class="btn primary" type="button">+ New project</button>
       </div>
 
@@ -40,6 +41,62 @@
           </div>
         </div>
       </section>
+
+
+      <div id="content-admin-root" class="content-admin-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>About content</h2><p>Edit the public About section in English and Arabic.</p></div>
+          </div>
+          <div class="panel-body">
+            <div id="content-admin-message" class="content-notice" hidden></div>
+            <p class="content-panel-note">These fields update the About section on the homepage without changing the layout, navbar, animations, or project data.</p>
+            <form id="about-form">
+              <div class="content-form-grid">
+                <div class="field full"><label for="about-lead-en">Lead — English</label><textarea id="about-lead-en" class="tall" required></textarea></div>
+                <div class="field full"><label for="about-p1-en">Paragraph 1 — English</label><textarea id="about-p1-en" required></textarea></div>
+                <div class="field full"><label for="about-p2-en">Paragraph 2 — English</label><textarea id="about-p2-en" required></textarea></div>
+                <div class="field full"><label for="about-interests-en">Interests — English</label><textarea id="about-interests-en" placeholder="One item per line"></textarea></div>
+                <div class="field"><label for="about-quote-en">Quote — English</label><textarea id="about-quote-en"></textarea></div>
+                <div class="field"><label for="about-author-en">Quote author — English</label><input id="about-author-en"></div>
+
+                <div class="field full" dir="rtl"><label for="about-lead-ar">العنوان التعريفي — العربية</label><textarea id="about-lead-ar" class="tall"></textarea></div>
+                <div class="field full" dir="rtl"><label for="about-p1-ar">الفقرة الأولى — العربية</label><textarea id="about-p1-ar"></textarea></div>
+                <div class="field full" dir="rtl"><label for="about-p2-ar">الفقرة الثانية — العربية</label><textarea id="about-p2-ar"></textarea></div>
+                <div class="field full" dir="rtl"><label for="about-interests-ar">الاهتمامات — العربية</label><textarea id="about-interests-ar" placeholder="عنصر في كل سطر"></textarea></div>
+                <div class="field" dir="rtl"><label for="about-quote-ar">الاقتباس — العربية</label><textarea id="about-quote-ar"></textarea></div>
+                <div class="field" dir="rtl"><label for="about-author-ar">صاحب الاقتباس — العربية</label><input id="about-author-ar"></div>
+              </div>
+              <div class="content-actions"><button id="save-about-button" class="btn primary" type="submit">Save About</button></div>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>Skills &amp; tools</h2><p>Add, edit, reorder, publish, hide, or remove skills.</p></div>
+            <button id="skills-refresh-button" class="btn ghost" type="button">Refresh</button>
+          </div>
+          <div class="panel-body">
+            <div id="skills-admin-list" class="skills-admin-list"><div class="spinner"></div></div>
+            <form id="skill-form" class="skill-form">
+              <input type="hidden" id="skill-id">
+              <div class="form-grid">
+                <div class="field"><label for="skill-name">Name *</label><input id="skill-name" required placeholder="Flutter"></div>
+                <div class="field" dir="rtl"><label for="skill-name-ar">الاسم بالعربية</label><input id="skill-name-ar" placeholder="Flutter"></div>
+                <div class="field"><label for="skill-category">Category</label><select id="skill-category"><option value="skill">Professional skill</option><option value="tool">Tool</option></select></div>
+                <div class="field"><label for="skill-order">Display order</label><input id="skill-order" type="number" min="0" step="1" value="0"></div>
+                <div class="field full"><label for="skill-icon-url">Icon URL (optional)</label><input id="skill-icon-url" type="url" placeholder="https://.../flutter.svg"></div>
+                <div class="field full"><label class="check"><input id="skill-published" type="checkbox" checked> Visible on public portfolio</label></div>
+              </div>
+              <div class="form-actions">
+                <button id="skill-cancel-button" class="btn ghost hidden" type="button">Cancel edit</button>
+                <button id="skill-save-button" class="btn primary" type="submit">Add skill</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
 
       <div class="admin-grid">
         <section class="panel">
@@ -129,5 +186,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/config.js"></script>
   <script src="../js/admin.js?v=17"></script>
+  <script src="../js/admin-content.js?v=21"></script>
 </body>
 </html>

@@ -1,0 +1,410 @@
+/* ========================================================================== 
+   Reference redesign — inspired by soumyajit4419/Portfolio's continuous
+   dark gradient + particle field, while preserving this portfolio's own
+   tubelight navbar, motion system, and project-card component.
+   Internal theme keys stay "light" and "dark" for backwards compatibility:
+   light = NAVY theme, dark = GRAPHITE theme.
+   ========================================================================== */
+
+html[data-theme="light"] {
+  color-scheme: dark;
+  --bg: #07111f;
+  --surface: #0b1830;
+  --surface-2: #0f2140;
+  --surface-soft: #091426;
+  --ink: #f4f7ff;
+  --muted: #aab7cf;
+  --line: rgba(175, 204, 255, .12);
+  --line-strong: rgba(175, 204, 255, .22);
+  --accent: #8095ff;
+  --accent-2: #6ab6ff;
+  --on-accent: #061226;
+  --header-bg: rgba(5, 16, 34, .72);
+  --footer-bg: #050c18;
+  --footer-ink: #f4f7ff;
+  --footer-muted: #9aabc5;
+  --panel-bg: rgba(9, 24, 48, .68);
+  --panel-bg-strong: rgba(12, 31, 60, .86);
+  --panel-border: rgba(167, 199, 255, .11);
+  --panel-border-strong: rgba(167, 199, 255, .22);
+  --panel-shadow: 0 24px 70px rgba(1, 9, 24, .36);
+  --card-bg: #0d1c36;
+  --card-bg-hover: #12264a;
+  --ambient-base: #050b15;
+  --ambient-grid: rgba(133, 164, 220, .04);
+  --ambient-glow-1: rgba(60, 101, 190, .34);
+  --ambient-glow-2: rgba(86, 105, 255, .18);
+  --shadow-sm: 0 14px 38px rgba(0, 7, 20, .32);
+  --shadow: 0 28px 80px rgba(0, 6, 18, .48);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101114;
+  --surface: #17191e;
+  --surface-2: #202229;
+  --surface-soft: #121419;
+  --ink: #f5f5f7;
+  --muted: #a9abb3;
+  --line: rgba(255,255,255,.09);
+  --line-strong: rgba(255,255,255,.17);
+  --accent: #8b80ff;
+  --accent-2: #72b6ff;
+  --on-accent: #0d0f14;
+  --header-bg: rgba(13, 14, 17, .76);
+  --footer-bg: #090a0c;
+  --footer-ink: #f5f5f7;
+  --footer-muted: #a0a3ac;
+  --panel-bg: rgba(21, 22, 27, .72);
+  --panel-bg-strong: rgba(26, 27, 33, .9);
+  --panel-border: rgba(255,255,255,.085);
+  --panel-border-strong: rgba(255,255,255,.16);
+  --panel-shadow: 0 24px 70px rgba(0,0,0,.4);
+  --card-bg: #191b20;
+  --card-bg-hover: #20232a;
+  --ambient-base: #0b0c0f;
+  --ambient-grid: rgba(255,255,255,.025);
+  --ambient-glow-1: rgba(86, 76, 160, .18);
+  --ambient-glow-2: rgba(49, 98, 150, .13);
+  --shadow-sm: 0 14px 38px rgba(0,0,0,.36);
+  --shadow: 0 28px 80px rgba(0,0,0,.54);
+}
+
+body {
+  background: var(--ambient-base);
+  color: var(--ink);
+}
+
+/* Continuous reference-style background. The canvas is created by
+   js/reference-theme.js; no external particle dependency is required. */
+.ambient-background {
+  background:
+    radial-gradient(circle at 18% 13%, var(--ambient-glow-1), transparent 32%),
+    radial-gradient(circle at 82% 42%, var(--ambient-glow-2), transparent 31%),
+    linear-gradient(145deg, color-mix(in srgb, var(--ambient-base) 76%, #18243c 24%), var(--ambient-base) 58%, color-mix(in srgb, var(--ambient-base) 88%, #050508 12%));
+}
+.ambient-grid { display: none; }
+.ambient-orb { opacity: .16; filter: blur(70px); }
+.ambient-orb-one { background: radial-gradient(circle, var(--ambient-glow-1), transparent 70%); }
+.ambient-orb-two { background: radial-gradient(circle, var(--ambient-glow-2), transparent 70%); }
+.ambient-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .72;
+}
+
+/* Remove the large white/glass section boxes from the previous rebuild.
+   Sections now float directly over the continuous gradient like the reference. */
+.section,
+.contact,
+.page-hero,
+.case-hero,
+.project-detail-loading,
+.project-not-found,
+.project-gallery-section,
+.emulator-section {
+  background: transparent;
+}
+.section > .container,
+.contact > .container,
+.page-hero > .container,
+.case-hero > .container,
+.project-detail-loading > .container,
+.project-not-found > .container,
+.project-gallery-section > .container,
+.emulator-section > .container {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding-inline: 0;
+}
+.section.black,
+html[data-theme="light"] .section.black,
+html[data-theme="dark"] .section.black {
+  color: var(--ink);
+  --ink: inherit;
+  --muted: inherit;
+  --panel-bg: inherit;
+  --panel-bg-strong: inherit;
+  --panel-border: inherit;
+  --panel-border-strong: inherit;
+  --accent: inherit;
+  --accent-2: inherit;
+}
+.section.black > .container { background: transparent; }
+.section.white { color: var(--ink); }
+
+/* Header remains deliberately minimal; the user's own Tubelight nav stays intact. */
+.topbar:not(.overlay) {
+  background: var(--header-bg);
+  border-color: var(--line);
+  box-shadow: 0 10px 40px rgba(0,0,0,.12);
+}
+.topbar.overlay {
+  background: linear-gradient(to bottom, rgba(3,8,18,.55), transparent);
+}
+.utility-button {
+  border-color: var(--line-strong);
+  background: rgba(255,255,255,.035);
+  color: #fff;
+}
+.utility-button:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+.tubelight-nav {
+  border-color: var(--panel-border-strong);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  box-shadow: 0 18px 55px rgba(0,0,0,.36);
+}
+.tubelight-indicator {
+  background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+  border-color: var(--panel-border-strong);
+}
+
+/* ========================================================================== 
+   Reference-like hero: text on the left, portrait/illustration on the right.
+   Existing splash/entrance classes are kept, so the user's animations survive.
+   ========================================================================== */
+.hero.hero-reference {
+  min-height: max(720px, 100svh);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: transparent;
+  color: #fff;
+}
+.hero.hero-reference::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 72% 48%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 29%),
+    linear-gradient(110deg, rgba(4,8,17,.18), transparent 50%);
+  mask-image: none;
+  animation: none;
+}
+.hero-reference-grid {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+  gap: clamp(36px, 6vw, 88px);
+  align-items: center;
+  width: min(calc(100% - 40px), var(--max));
+  min-height: max(660px, 88svh);
+  padding-top: 88px;
+  padding-bottom: 80px;
+}
+.hero-copy-stack { position: relative; z-index: 4; max-width: 760px; }
+.hero-kicker {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: clamp(23px, 2.4vw, 36px);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  text-transform: none;
+}
+.hero-title {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(54px, 7vw, 104px);
+  line-height: .94;
+  letter-spacing: -.055em;
+  text-shadow: 0 12px 42px rgba(0,0,0,.38);
+}
+.hero-title .hero-prefix {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,.72);
+  font-size: .38em;
+  line-height: 1;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.hero-title strong {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+}
+.hero-title strong span { color: var(--accent); }
+.hero-name {
+  margin-top: 25px;
+  color: var(--accent-2);
+  font-family: var(--font-display);
+  font-size: clamp(23px, 3vw, 42px);
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+.hero-copy-top {
+  position: static;
+  width: min(620px, 100%);
+  margin: 22px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(229, 236, 249, .76);
+  font-size: clamp(14px, 1.15vw, 17px);
+  line-height: 1.75;
+}
+html[dir="rtl"] .hero-copy-top { padding: 0; background: transparent; }
+.hero-scroll { margin-top: 30px; width: fit-content; }
+.hero-visual {
+  position: relative;
+  min-height: min(70svh, 650px);
+  display: grid;
+  place-items: center;
+}
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  width: min(38vw, 480px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  box-shadow: 0 0 80px color-mix(in srgb, var(--accent) 18%, transparent), inset 0 0 70px rgba(255,255,255,.025);
+  animation: referenceOrbitPulse 6s ease-in-out infinite alternate;
+}
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  width: min(30vw, 390px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 20%, transparent), transparent 70%);
+  filter: blur(18px);
+}
+.hero-portrait {
+  --motion-x: 0px;
+  --motion-y: 0px;
+  position: relative;
+  inset: auto;
+  z-index: 2;
+  width: min(34vw, 455px);
+  height: min(64svh, 590px);
+  transform: translate(var(--motion-x), var(--motion-y));
+  object-fit: cover;
+  object-position: center 13%;
+  border-radius: 44% 44% 20px 20px / 28% 28% 20px 20px;
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 30px 90px rgba(0,0,0,.42), 0 0 70px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+@keyframes referenceOrbitPulse { to { transform: scale(1.045) rotate(4deg); opacity: .72; } }
+
+/* About mirrors the reference's clean text + visual rhythm without copying its
+   component markup. The content itself stays editable through Supabase. */
+.about-grid { align-items: center; }
+.about-photo {
+  border-radius: 28px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: 0 28px 85px rgba(0,0,0,.34);
+}
+.about-lead { color: #fff; }
+.about-side, .about-side p, .about-interests li { color: var(--muted); }
+.about-quote { border-inline-start-color: var(--accent); }
+.about-quote p { color: var(--ink); }
+
+.about-skillset {
+  border-top-color: var(--line);
+}
+.chip-row { gap: 12px; }
+.chip {
+  min-height: 48px;
+  padding: 11px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+  color: var(--ink);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+.chip::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.chip:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
+  background: color-mix(in srgb, var(--surface-2) 78%, transparent);
+}
+
+/* Projects component intentionally not redesigned: only its surrounding section
+   gets the reference-like continuous background. Existing tilt/glass cards remain. */
+.projects-grid { position: relative; }
+
+.page-hero { padding-top: clamp(120px, 15vw, 175px); }
+.page-hero h1, .section-title, .case-hero h1 { color: #fff; }
+.page-hero .section-intro { color: var(--muted); }
+
+/* Contact is simplified into a reference-like dark strip rather than a white card. */
+.contact > .container {
+  padding-block: clamp(46px, 7vw, 82px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.contact h2 { color: #fff; }
+.contact-details > div {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.contact-orbit { border-color: var(--line-strong); background: color-mix(in srgb, var(--surface) 64%, transparent); }
+
+/* Project detail cards keep their component layout, only surface colors shift. */
+.case-cover, .case-card, .project-gallery figure, .device-stage {
+  border-color: var(--line);
+}
+.case-card { background: color-mix(in srgb, var(--surface) 70%, transparent); }
+.case-tech-list span { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
+.emulator-section > .container { color: #fff; background: transparent; border: 0; }
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--ambient-base) 94%, #000 6%);
+}
+
+/* Dynamic admin-managed skill rows */
+.dynamic-skill-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+.dynamic-skill-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+@media (max-width: 900px) {
+  .hero-reference-grid { grid-template-columns: 1fr; align-items: start; gap: 20px; padding-top: 132px; padding-bottom: 70px; }
+  .hero-copy-stack { max-width: 760px; }
+  .hero-visual { min-height: 430px; margin-top: 5px; }
+  .hero-portrait { width: min(76vw, 420px); height: min(55svh, 500px); }
+  .hero-visual::before { width: min(76vw, 440px); }
+  .hero-visual::after { width: min(62vw, 350px); }
+}
+
+@media (max-width: 640px) {
+  .container, .hero-reference-grid { width: min(calc(100% - 28px), var(--max)); }
+  .hero.hero-reference { min-height: 900px; }
+  .hero-reference-grid { padding-top: 108px; }
+  .hero-kicker { font-size: 22px; }
+  .hero-title { font-size: clamp(48px, 15vw, 68px); }
+  .hero-name { font-size: clamp(22px, 7vw, 30px); }
+  .hero-copy-top { font-size: 14px; }
+  .hero-visual { min-height: 390px; }
+  .hero-portrait { width: min(82vw, 360px); height: 390px; }
+  .section, .contact, .page-hero, .case-hero, .project-gallery-section, .emulator-section { padding-block: 52px; }
+  .about-media { max-width: 270px; }
+  .chip { min-height: 44px; padding: 9px 14px; border-radius: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual::before { animation: none; }
+  .ambient-particles { opacity: .42; }
+}

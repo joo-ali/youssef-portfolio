@@ -23,6 +23,7 @@
   <title>Youssef Ali Kamal — Flutter Developer</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css?v=20">
+  <link rel="stylesheet" href="css/reference-redesign.css?v=21">
 </head>
 <body class="has-splash" data-page="home" id="top">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -61,17 +62,20 @@
     </header>
 
     <main id="main-content">
-      <section class="hero" aria-labelledby="hero-title">
-        <p class="hero-copy-top" data-i18n="home.heroCopy">Flutter developer focused on responsive, user-friendly mobile applications and dependable product experiences.</p>
-        <img class="hero-portrait" src="assets/profile.png" alt="Portrait of Youssef Ali Kamal">
-        <div class="hero-title-wrap">
-          <div class="container">
-            <div class="hero-kicker" data-i18n="home.heroKicker">Creative mobile developer</div>
-            <h1 class="hero-title" id="hero-title" data-i18n="home.heroTitle">Flutter Developer</h1>
-            <div class="hero-bottom">
-              <div class="hero-name" data-i18n="home.heroName">Youssef Ali Kamal</div>
-              <a class="hero-scroll" href="#about"><span aria-hidden="true">↘</span><b data-i18n="home.scroll">Scroll to explore</b></a>
-            </div>
+      <section class="hero hero-reference" aria-labelledby="hero-title">
+        <div class="container hero-reference-grid">
+          <div class="hero-copy-stack">
+            <div class="hero-kicker" data-i18n="home.heroKicker">Hi There! 👋🏻</div>
+            <h1 class="hero-title" id="hero-title">
+              <span class="hero-prefix" data-i18n="home.heroPrefix">I'm</span>
+              <strong data-i18n="home.heroName">Youssef Ali Kamal</strong>
+            </h1>
+            <div class="hero-name" data-i18n="home.heroTitle">Flutter Developer</div>
+            <p class="hero-copy-top" data-i18n="home.heroCopy">Flutter developer focused on responsive, user-friendly mobile applications and dependable product experiences.</p>
+            <a class="hero-scroll" href="#about"><span aria-hidden="true">↘</span><b data-i18n="home.scroll">Scroll to explore</b></a>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <img class="hero-portrait" src="assets/profile.png" alt="Portrait of Youssef Ali Kamal">
           </div>
         </div>
       </section>
@@ -84,17 +88,17 @@
           <div class="about-side reveal">
             <a class="availability-badge" href="#contact"><span class="availability-dot" aria-hidden="true"></span><span data-i18n="badge.available">Available for opportunities</span></a>
             <div class="eyebrow" data-i18n="about.eyebrow">Know who I am</div>
-            <h2 class="about-lead" data-i18n="home.aboutLead">I turn ideas into responsive mobile experiences that feel clear, useful, and polished.</h2>
-            <p data-i18n="home.aboutP1">I am a Computer Science graduate and Flutter developer with hands-on experience in Flutter, Dart, Firebase Authentication, Cloud Firestore, REST APIs, Dio, Retrofit, Bloc/Cubit, Hive, and Git/GitHub.</p>
-            <p data-i18n="home.aboutP2">I enjoy solving technical problems, connecting applications to real backends, and continuously improving architecture and user experience.</p>
-            <ul class="about-interests">
-              <li data-i18n="about.interest1">Exploring new Flutter packages and tools</li>
-              <li data-i18n="about.interest2">Writing about what I learn while building</li>
-              <li data-i18n="about.interest3">Contributing to and reading open-source code</li>
+            <h2 class="about-lead" data-about-key="lead">I turn ideas into responsive mobile experiences that feel clear, useful, and polished.</h2>
+            <p data-about-key="p1">I am a Computer Science graduate and Flutter developer with hands-on experience in Flutter, Dart, Firebase Authentication, Cloud Firestore, REST APIs, Dio, Retrofit, Bloc/Cubit, Hive, and Git/GitHub.</p>
+            <p data-about-key="p2">I enjoy solving technical problems, connecting applications to real backends, and continuously improving architecture and user experience.</p>
+            <ul class="about-interests" data-about-interests>
+              <li>Exploring new Flutter packages and tools</li>
+              <li>Writing about what I learn while building</li>
+              <li>Contributing to and reading open-source code</li>
             </ul>
             <blockquote class="about-quote">
-              <p data-i18n="about.quote">Strive to build things that make a difference.</p>
-              <cite data-i18n="about.quoteAuthor">— Youssef Ali Kamal</cite>
+              <p data-about-key="quote">Strive to build things that make a difference.</p>
+              <cite data-about-key="quoteAuthor">— Youssef Ali Kamal</cite>
             </blockquote>
           </div>
         </div>
@@ -102,24 +106,12 @@
         <div class="container about-skillset">
           <div class="eyebrow" data-i18n="about.skillsetEyebrow">Professional skillset</div>
           <h3 data-i18n="about.skillsetTitle">Technologies I work with</h3>
-          <div class="chip-row">
-            <span class="chip">Flutter</span>
-            <span class="chip">Dart</span>
-            <span class="chip">Firebase Auth</span>
-            <span class="chip">Cloud Firestore</span>
-            <span class="chip">REST APIs</span>
-            <span class="chip">Dio</span>
-            <span class="chip">Retrofit</span>
-            <span class="chip">Bloc / Cubit</span>
-            <span class="chip">Hive</span>
-            <span class="chip">Git &amp; GitHub</span>
+          <div class="chip-row" id="skills-list" data-skills-category="skill">
+            <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Firebase Auth</span><span class="chip">Cloud Firestore</span><span class="chip">REST APIs</span><span class="chip">Dio</span><span class="chip">Retrofit</span><span class="chip">Bloc / Cubit</span><span class="chip">Hive</span><span class="chip">Git &amp; GitHub</span>
           </div>
           <h3 data-i18n="about.toolsTitle">Tools I use</h3>
-          <div class="chip-row">
-            <span class="chip">VS Code</span>
-            <span class="chip">Android Studio</span>
-            <span class="chip">Postman</span>
-            <span class="chip">Figma</span>
+          <div class="chip-row" id="tools-list" data-skills-category="tool">
+            <span class="chip">VS Code</span><span class="chip">Android Studio</span><span class="chip">Postman</span><span class="chip">Figma</span>
           </div>
         </div>
       </section>
@@ -202,9 +194,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
-  <script src="js/site.js?v=20"></script>
+  <script src="js/site.js?v=21"></script>
+  <script src="js/reference-theme.js?v=21"></script>
   <script src="js/animations.js?v=8"></script>
   <script src="js/interactions.js?v=2"></script>
   <script src="js/public.js"></script>
+  <script src="js/content.js?v=21"></script>
 </body>
 </html>
