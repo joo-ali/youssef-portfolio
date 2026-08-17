@@ -136,7 +136,7 @@ body {
   font-size: clamp(16px, 1.05vw, 18px);
   line-height: 1.65;
   text-rendering: optimizeLegibility;
-  padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   transition: background-color .25s ease, color .25s ease;
 }
 html[dir="rtl"] body { --font-body: "IBM Plex Sans Arabic", Inter, sans-serif; --font-display: "IBM Plex Sans Arabic", "Space Grotesk", sans-serif; line-height: 1.78; }

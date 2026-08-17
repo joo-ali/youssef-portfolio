@@ -617,6 +617,9 @@ html[dir="rtl"] .tubelight-label { direction: rtl; unicode-bidi: plaintext; }
   overflow: hidden;
 }
 .skill-logo::after { content: attr(data-fallback); position: absolute; inset: 0; display: grid; place-items: center; z-index: 0; }
+/* Hide the fallback initials only after the real logo has successfully loaded.
+   This prevents the initials/symbol from showing through transparent SVG/PNG logos. */
+.skill-logo.has-image::after { display: none; }
 .skill-logo img,
 .dynamic-skill-icon img {
   position: relative;

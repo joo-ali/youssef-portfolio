@@ -1,8 +1,8 @@
-# Youssef Ali Kamal Portfolio — Reference Redesign V22
+# Youssef Ali Kamal Portfolio — Reference Redesign V21
 
 Static HTML/CSS/JavaScript portfolio with Supabase-backed projects, CV, About content, and Skills/Tools.
 
-## V22 design direction
+## V21 design direction
 
 This build uses the supplied `soumyajit4419/Portfolio` repository as a visual reference for the overall atmosphere: a continuous dark background, tiny moving particles, a split hero, and subtle accent glows.
 
@@ -41,7 +41,7 @@ The private dashboard now also manages:
 
 Existing project and CV controls remain available.
 
-## Required Supabase migration
+## Required Supabase migration for V21
 
 If this Supabase project already has the earlier portfolio migrations, run this file once:
 
@@ -105,3 +105,8 @@ The browser code uses only the Supabase publishable/anon key. Never add a `servi
 - Skills/tools rendered as logo cards with admin icon URL override and automatic icon fallbacks.
 - WhatsApp contact orbit contrast fixed in both themes.
 - CV is displayed as a static image-style preview; PDF.js upgrades it to the current Supabase CV first page when available.
+
+
+## V23 fixes
+- Removed obsolete bottom navigation body padding that caused empty space below the footer.
+- Skill logo fallback initials now disappear once a real logo loads, preventing overlap through transparent logos.

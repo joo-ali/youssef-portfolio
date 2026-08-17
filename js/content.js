@@ -98,7 +98,7 @@
     const label = escapeHtml(rawLabel);
     const fallback = escapeHtml(skillFallbackMark(skill.name || rawLabel));
     const iconUrl = skill.icon_url || automaticIconFor(skill);
-    const image = iconUrl ? `<img src="${escapeHtml(iconUrl)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+    const image = iconUrl ? `<img src="${escapeHtml(iconUrl)}" alt="" loading="lazy" onload="this.parentElement.classList.add('has-image')" onerror="this.parentElement.classList.remove('has-image');this.remove()">` : "";
     return `<span class="chip skill-tile" data-skill-id="${escapeHtml(skill.id || "")}"><span class="skill-logo" data-fallback="${fallback}" aria-hidden="true">${image}</span><span class="skill-name">${label}</span></span>`;
   }
 
