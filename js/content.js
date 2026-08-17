@@ -70,12 +70,36 @@
     return lang === "ar" && skill.name_ar ? skill.name_ar : skill.name;
   }
 
+  const automaticSkillIcons = {
+    "flutter": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg",
+    "dart": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg",
+    "firebase auth": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg",
+    "cloud firestore": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg",
+    "bloc / cubit": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg",
+    "git & github": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
+    "vs code": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+    "android studio": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg",
+    "postman": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg",
+    "figma": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg"
+  };
+
+  function automaticIconFor(skill) {
+    return automaticSkillIcons[String(skill?.name || "").trim().toLowerCase()] || null;
+  }
+
+  function skillFallbackMark(label) {
+    const words = String(label || "").replace(/[^A-Za-z0-9 ]/g, " ").trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return "◇";
+    return (words.length > 1 ? words.slice(0, 2).map(word => word[0]).join("") : words[0].slice(0, 2)).toUpperCase();
+  }
+
   function skillMarkup(skill) {
-    const label = escapeHtml(skillLabel(skill) || "Skill");
-    const icon = skill.icon_url
-      ? `<span class="dynamic-skill-icon"><img src="${escapeHtml(skill.icon_url)}" alt="" loading="lazy"></span>`
-      : "";
-    return `<span class="chip" data-skill-id="${escapeHtml(skill.id || "")}">${icon}<span>${label}</span></span>`;
+    const rawLabel = skillLabel(skill) || "Skill";
+    const label = escapeHtml(rawLabel);
+    const fallback = escapeHtml(skillFallbackMark(skill.name || rawLabel));
+    const iconUrl = skill.icon_url || automaticIconFor(skill);
+    const image = iconUrl ? `<img src="${escapeHtml(iconUrl)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+    return `<span class="chip skill-tile" data-skill-id="${escapeHtml(skill.id || "")}"><span class="skill-logo" data-fallback="${fallback}" aria-hidden="true">${image}</span><span class="skill-name">${label}</span></span>`;
   }
 
   function renderSkills() {

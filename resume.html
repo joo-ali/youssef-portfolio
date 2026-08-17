@@ -23,13 +23,14 @@
   <title>Resume — Youssef Ali Kamal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css?v=20">
-  <link rel="stylesheet" href="css/reference-redesign.css?v=21">
+  <link rel="stylesheet" href="css/reference-redesign.css?v=22">
 </head>
 <body data-page="resume" id="top">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"><span></span></div>
   <header class="topbar">
     <div class="container topbar-inner">
+      <a class="code-brand" href="index.html" aria-label="Youssef Ali Kamal — Home"><span>&lt;/</span><strong>Y</strong><span>&gt;</span></a>
       <div class="header-right">
         <div class="utility-controls">
           <button class="utility-button theme-toggle" type="button" aria-label="Switch theme">☾</button>
@@ -55,13 +56,10 @@
             <span class="cv-download-icon" aria-hidden="true">↓</span>
             <span data-i18n="resume.download">Download CV</span>
           </a>
-          <a class="pill-btn" href="assets/Youssef_Ali_Kamal_CV.pdf" target="_blank" rel="noreferrer" data-cv-link data-i18n="resume.openTab">Open in new tab</a>
         </div>
-
-        <div class="resume-frame">
-          <iframe data-cv-embed src="assets/Youssef_Ali_Kamal_CV.pdf" title="Youssef Ali Kamal — Resume PDF" loading="lazy">
-            <p data-i18n="resume.fallback">Your browser can't preview PDFs inline.</p>
-          </iframe>
+        <div class="resume-frame resume-image-preview" aria-label="CV preview">
+          <img class="resume-preview-fallback" data-cv-preview-fallback src="assets/Youssef_Ali_Kamal_CV-preview.png" alt="Preview of Youssef Ali Kamal CV" loading="lazy">
+          <canvas class="resume-preview-canvas" data-cv-preview aria-hidden="true"></canvas>
         </div>
 
         <div class="resume-actions resume-actions-bottom">
@@ -103,9 +101,10 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/site.js?v=21"></script>
-  <script src="js/reference-theme.js?v=21"></script>
+  <script src="js/site.js?v=22"></script>
+  <script src="js/reference-theme.js?v=22"></script>
   <script src="js/animations.js?v=8"></script>
   <script src="js/interactions.js?v=2"></script>
 </body>

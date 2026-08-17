@@ -223,30 +223,60 @@
   }
 
 
+  async function renderCvPreview(pdfUrl) {
+    const canvas = document.querySelector("[data-cv-preview]");
+    const fallbackImage = document.querySelector("[data-cv-preview-fallback]");
+    if (!canvas || !window.pdfjsLib || !pdfUrl) return;
+    try {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const pdf = await window.pdfjsLib.getDocument({ url: pdfUrl }).promise;
+      const page = await pdf.getPage(1);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const hostWidth = Math.min(900, canvas.parentElement?.clientWidth || 900);
+      const scale = Math.min(2, Math.max(1, hostWidth / baseViewport.width));
+      const viewport = page.getViewport({ scale });
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(viewport.width * ratio);
+      canvas.height = Math.floor(viewport.height * ratio);
+      canvas.style.aspectRatio = `${viewport.width} / ${viewport.height}`;
+      const context = canvas.getContext("2d", { alpha: false });
+      await page.render({ canvasContext: context, viewport, transform: ratio === 1 ? null : [ratio, 0, 0, ratio, 0, 0] }).promise;
+      canvas.classList.add("is-ready");
+      canvas.removeAttribute("aria-hidden");
+      if (fallbackImage) fallbackImage.classList.add("is-rendered");
+    } catch (_) {
+      // Keep the bundled PNG preview visible if PDF.js/CDN/CORS is unavailable.
+    }
+  }
+
   async function setupCvLinks() {
     const links = [...document.querySelectorAll("[data-cv-link]")];
-    const embed = document.querySelector("[data-cv-embed]");
-    if (!links.length && !embed) return;
+    const preview = document.querySelector("[data-cv-preview]");
+    if (!links.length && !preview) return;
     const fallback = "assets/Youssef_Ali_Kamal_CV.pdf";
+    let activeUrl = fallback;
     links.forEach(link => { if (!link.getAttribute("href")) link.href = fallback; });
-    if (embed && !embed.getAttribute("src")) embed.src = fallback;
     const cfg = window.PORTFOLIO_CONFIG || {};
-    if (!window.supabase || !cfg.supabaseUrl || !cfg.supabaseAnonKey || cfg.supabaseUrl.startsWith("YOUR_")) return;
-    try {
-      const cvClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-      const { data } = cvClient.storage.from("portfolio-media").getPublicUrl("site/cv/Youssef_Ali_Kamal_CV.pdf");
-      const remoteUrl = data?.publicUrl;
-      if (!remoteUrl) return;
-      const response = await fetch(`${remoteUrl}?check=${Date.now()}`, { method: "HEAD", cache: "no-store" });
-      if (!response.ok) return;
-      links.forEach(link => {
-        link.href = remoteUrl;
-        if (link.hasAttribute("download")) link.setAttribute("download", "Youssef_Ali_Kamal_CV.pdf");
-      });
-      if (embed) embed.src = remoteUrl;
-    } catch (_) {
-      // Keep the bundled CV as a reliable fallback.
+    if (window.supabase && cfg.supabaseUrl && cfg.supabaseAnonKey && !cfg.supabaseUrl.startsWith("YOUR_")) {
+      try {
+        const cvClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+        const { data } = cvClient.storage.from("portfolio-media").getPublicUrl("site/cv/Youssef_Ali_Kamal_CV.pdf");
+        const remoteUrl = data?.publicUrl;
+        if (remoteUrl) {
+          const response = await fetch(`${remoteUrl}?check=${Date.now()}`, { method: "HEAD", cache: "no-store" });
+          if (response.ok) {
+            activeUrl = remoteUrl;
+            links.forEach(link => {
+              link.href = remoteUrl;
+              if (link.hasAttribute("download")) link.setAttribute("download", "Youssef_Ali_Kamal_CV.pdf");
+            });
+          }
+        }
+      } catch (_) {
+        // Keep bundled PDF + preview as reliable fallback.
+      }
     }
+    renderCvPreview(activeUrl);
   }
 
   const NAV_ICONS = {
@@ -280,7 +310,10 @@
         <span class="tubelight-icon">${NAV_ICONS[item.key]}</span>
         <span class="tubelight-label" data-i18n="${item.i18n}">${t(item.i18n)}</span>
       </a>`).join("");
-    document.body.appendChild(nav);
+    const topbarInner = document.querySelector(".topbar-inner");
+    const headerRight = topbarInner?.querySelector(".header-right");
+    if (topbarInner) topbarInner.insertBefore(nav, headerRight || null);
+    else document.body.appendChild(nav);
 
     const indicator = nav.querySelector(".tubelight-indicator");
     const links = [...nav.querySelectorAll(".tubelight-item")];
@@ -314,6 +347,14 @@
     // Wait a frame for layout/fonts before the first measurement so the
     // indicator doesn't snap visibly into place after paint.
     requestAnimationFrame(() => moveIndicator(activeLink, false));
+  }
+
+  function setupStickyHeader() {
+    const header = document.querySelector(".topbar");
+    if (!header) return;
+    const sync = () => header.classList.toggle("is-scrolled", window.scrollY > 12);
+    window.addEventListener("scroll", sync, { passive: true });
+    sync();
   }
 
   function observeReveals() {
@@ -360,8 +401,9 @@
     setTheme(preferredTheme());
     setupAmbientBackground();
     setupControls();
+    setupStickyHeader();
     setupTubelightNav();
-  setupCvLinks();
+    setupCvLinks();
     setupHeroMotion();
     observeReveals();
   });
