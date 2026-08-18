@@ -382,8 +382,8 @@
     if (!image || !hero || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     hero.addEventListener("pointermove", event => {
       if (window.innerWidth < 981) return;
-      const x = Math.round((event.clientX / window.innerWidth - 0.5) * 10);
-      const y = Math.round((event.clientY / window.innerHeight - 0.5) * 6);
+      const x = (event.clientX / window.innerWidth - 0.5) * 10;
+      const y = (event.clientY / window.innerHeight - 0.5) * 6;
       image.style.setProperty("--motion-x", `${x}px`);
       image.style.setProperty("--motion-y", `${y}px`);
     });
