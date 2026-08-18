@@ -412,7 +412,7 @@ html[dir="rtl"] .hero-copy-top { padding: 0; background: transparent; }
 
 /* ========================================================================== 
    V22 refinements
-   - full sticky top navigation with </Y> brand
+   - full sticky top navigation with <Y/> brand
    - blur only after scrolling
    - square portrait treatment that matches the background geometry
    - logo-based skill tiles
@@ -695,4 +695,78 @@ html[dir="rtl"] .tubelight-label { direction: rtl; unicode-bidi: plaintext; }
   .code-brand { min-width: 42px; font-size: 16px; }
   .utility-button { width: 34px; height: 34px; }
   .tubelight-item { min-width: 34px; padding: 7px 8px; }
+}
+
+
+/* ========================================================================== 
+   V24 polish
+   - preserve the original 1254x1254 portrait bytes at full quality
+   - frame/crop in CSS only (no resized source asset)
+   - remove sub-pixel softness from hero motion
+   - About ends with a Resume CTA
+   ========================================================================== */
+.hero-portrait-frame {
+  position: relative;
+  z-index: 2;
+  width: min(38vw, 510px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 34px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: color-mix(in srgb, var(--surface-2) 72%, transparent);
+  box-shadow: 0 30px 90px rgba(0,0,0,.40), 0 0 52px color-mix(in srgb, var(--accent) 13%, transparent);
+}
+.hero-portrait-frame .hero-portrait {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: 50% 24%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  image-rendering: auto;
+  transform: translate3d(var(--motion-x), var(--motion-y), 0) scale(1.012);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+/* The backing shapes now echo the portrait frame rather than fighting it. */
+.hero-visual::before {
+  width: min(38vw, 510px);
+  aspect-ratio: 4 / 5;
+  border-radius: 38px;
+  transform: translate(18px, -14px) rotate(3deg);
+}
+.hero-visual::after {
+  width: min(36vw, 480px);
+  aspect-ratio: 4 / 5;
+  border-radius: 42px;
+  transform: translate(-20px, 22px);
+}
+.about-resume-action {
+  margin-top: 26px;
+  display: flex;
+  justify-content: flex-start;
+}
+.about-resume-link {
+  min-height: 48px;
+  padding-inline: 20px;
+  gap: 10px;
+}
+html[dir="rtl"] .about-resume-action { justify-content: flex-start; }
+
+@media (max-width: 900px) {
+  .hero-portrait-frame { width: min(78vw, 430px); }
+  .hero-visual::before { width: min(78vw, 430px); }
+  .hero-visual::after { width: min(74vw, 410px); }
+}
+@media (max-width: 760px) {
+  .hero-portrait-frame { width: min(84vw, 390px); border-radius: 28px; }
+  .hero-visual::before { width: min(84vw, 390px); border-radius: 32px; }
+  .hero-visual::after { width: min(80vw, 370px); border-radius: 34px; }
+  .hero-portrait-frame .hero-portrait { object-position: 50% 22%; }
 }

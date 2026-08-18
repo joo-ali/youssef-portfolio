@@ -100,7 +100,7 @@ The browser code uses only the Supabase publishable/anon key. Never add a `servi
 
 
 ## V22 refinements
-- Sticky full-width top navigation with `</Y>` brand; blur appears only after scrolling.
+- Sticky full-width top navigation with `<Y/>` brand; blur appears only after scrolling.
 - Hero portrait switched from arch mask to a square rounded treatment matching the background geometry.
 - Skills/tools rendered as logo cards with admin icon URL override and automatic icon fallbacks.
 - WhatsApp contact orbit contrast fixed in both themes.
@@ -110,3 +110,9 @@ The browser code uses only the Supabase publishable/anon key. Never add a `servi
 ## V23 fixes
 - Removed obsolete bottom navigation body padding that caused empty space below the footer.
 - Skill logo fallback initials now disappear once a real logo loads, preventing overlap through transparent logos.
+
+
+## V24 polish
+- Hero uses the untouched 1254×1254 original portrait asset via a dedicated cache-busted source, with CSS-only framing/cropping and pixel-snapped pointer motion.
+- Removed the availability badge from About and added a bilingual View Resume CTA.
+- Navbar code mark is now `<Y/>`, the syntactically coherent self-closing developer mark.
