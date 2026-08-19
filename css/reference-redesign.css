@@ -950,3 +950,40 @@ html[data-theme="dark"] {
   }
   .splash-loader span { transform: scaleX(1) !important; }
 }
+
+/* ==========================================================================
+   V28 — About portrait grayscale → color on interaction
+   ========================================================================== */
+.about-photo {
+  filter: grayscale(100%) contrast(1.04);
+  transition:
+    filter .38s ease,
+    transform .38s ease,
+    box-shadow .38s ease;
+  will-change: filter, transform;
+}
+
+.about-photo:hover,
+.about-photo:focus-visible {
+  filter: grayscale(0%) contrast(1);
+  transform: scale(1.018);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .about-photo:active {
+    filter: grayscale(0%) contrast(1);
+    transform: scale(1.012);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-photo {
+    transition: filter .18s ease !important;
+  }
+
+  .about-photo:hover,
+  .about-photo:focus-visible,
+  .about-photo:active {
+    transform: none !important;
+  }
+}
